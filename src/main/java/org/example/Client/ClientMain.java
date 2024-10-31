@@ -1,8 +1,7 @@
 package org.example.Client;
 
 import com.fazecast.jSerialComm.SerialPort;
-import org.example.SerialPort.SerialPortManager;
-
+import org.example.RobotController.RobotController;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -11,8 +10,8 @@ import java.util.Scanner;
 public class ClientMain {
 
     public static void main(String[] args) {
-        SerialPortManager portManager = new SerialPortManager("COM3", 9600);
         SerialPort serialPort = SerialPort.getCommPort("COM3");
+        RobotController robotController = new RobotController(serialPort);
 
         Socket socket = null;
         InputStreamReader inputStreamReader = null;
@@ -100,10 +99,6 @@ public class ClientMain {
                 e.printStackTrace();
             }
         }
-    }
-    public SerialPort getSerialPort(){
-         SerialPort serialPort = SerialPort.getCommPort("COM3");
-         return serialPort;
     }
 }
 
