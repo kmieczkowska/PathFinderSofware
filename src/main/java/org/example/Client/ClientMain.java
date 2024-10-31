@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class ClientMain {
+
     public static void main(String[] args) {
         SerialPortManager portManager = new SerialPortManager("COM3", 9600);
         SerialPort serialPort = SerialPort.getCommPort("COM3");
@@ -100,4 +101,9 @@ public class ClientMain {
             }
         }
     }
+    public SerialPort getSerialPort(){
+         SerialPort serialPort = SerialPort.getCommPort("COM3");
+         return serialPort;
+    }
 }
+
