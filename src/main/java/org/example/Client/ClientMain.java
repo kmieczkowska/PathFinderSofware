@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public class ClientMain {
 
+    //TODO przerobic metode
     public static void main(String[] args) {
         SerialPort serialPort = SerialPort.getCommPort("COM3");
         RobotController robotController = new RobotController(serialPort);
