@@ -83,6 +83,7 @@ public class RobotController {
      * */
     public void strategy_1() {
         while (true) {
+            System.out.println("tick.");
             String sensorValues = getSensorValues();
             delay(1000);
             switch (sensorValues) {
