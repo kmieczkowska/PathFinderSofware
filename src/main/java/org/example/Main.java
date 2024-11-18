@@ -20,6 +20,7 @@ public class Main {
 
         serialPort.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
+        serialPort.openPort();
 
         RobotController robotController = new RobotController(serialPort);
 
