@@ -119,4 +119,19 @@ public class RobotController {
             }
         }
     }
+    public void debug(){
+        System.out.println("[DEBUG] send emergency stop.");
+        emergencyStop();
+        delay(3);
+
+        System.out.println("[DEBUG] send move forward.");
+        moveForward();
+        delay(3);
+
+        for(int i =0;i<3;i++){
+            System.out.println("[DEBUG] send get sensor values.");
+            System.out.println("[DEBUG] sensor values: "+getSensorValues());
+        }
+        delay(5000);
+    }
 }
