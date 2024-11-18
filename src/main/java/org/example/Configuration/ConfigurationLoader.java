@@ -22,6 +22,10 @@ public class ConfigurationLoader {
         return properties.getProperty("SERIAL_LOCAL_MODE");
     }
 
+    public String getRobotMode() {
+        return properties.getProperty("ROBOT_MODE");
+    }
+
 
     // Main method for testing
     public static void main(String[] args) {
