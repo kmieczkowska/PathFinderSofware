@@ -1,6 +1,7 @@
 package org.example;
 
 import com.fazecast.jSerialComm.SerialPort;
+import org.example.Camera.CameraDetector;
 import org.example.Configuration.ConfigurationLoader;
 import org.example.RobotController.RobotController;
 
@@ -23,8 +24,9 @@ public class Main {
         serialPort.openPort();
 
         RobotController robotController = new RobotController(serialPort);
+        CameraDetector detector = new CameraDetector(robotController);
 
-        if(ROBOT_MODE == 0){throw new UnsupportedOperationException("Not implemented yet");}
+        if(ROBOT_MODE == 0){detector.main();}
         else if(ROBOT_MODE == 1){ robotController.strategy_1();}
         else if(ROBOT_MODE == 2){ robotController.debug();}
 

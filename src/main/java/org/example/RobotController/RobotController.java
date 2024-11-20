@@ -79,6 +79,11 @@ public class RobotController {
         }
     }
 
+    public void sendCommand(String command){
+        serialPort.writeBytes((command + "\n").getBytes(), 2);
+    }
+
+
     /**
      * Strategia dzialania robota
      * */
