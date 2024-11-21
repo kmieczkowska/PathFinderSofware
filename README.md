@@ -20,7 +20,8 @@ docker build -t pathfinderclient:v1.0 .
 # TODO:
 - obsługa wyjatków (kod wywala bład jezeli nie ma portu albo kamerki kod sie wywala, moze sprawdzic czy jest podpiety i zwórcic komunikak ze nie podłaczona wtedy kod nie bedzie sie wywalał tylko bedzia nas informował)
 - komenetrze do pliku konfiguracyjengo i wiecej parametrów
-- lepiej napisac debug
+- Napisać Testy *lepiej napisac debug*
+- Badanie czasu wykonwania kodu
 
 # Godziny znarowane na konfiguracje javy
 ✅20.11.2024 6 godzniy</br>
