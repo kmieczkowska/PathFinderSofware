@@ -36,11 +36,12 @@
         </dependency>
 
         <dependency>
-          <groupId>org.openpnp</groupId>
-          <artifactId>opencv</artifactId>
-          <version>4.9.0-0</version>
-      </dependency>
-      
+            <groupId>org.bytedeco</groupId>
+            <artifactId>opencv-platform</artifactId>
+            <version>4.10.0-1.5.11</version>
+        </dependency>
+
+
     </dependencies>
 
 </project>
