@@ -1,5 +1,8 @@
 package org.example.Camera;
 
+
+import org.bytedeco.javacpp.Loader;
+import org.bytedeco.opencv.opencv_java;
 import org.example.RobotController.RobotController;
 import org.opencv.core.*;
 import org.opencv.highgui.HighGui;
@@ -19,7 +22,8 @@ public class CameraDetector {
 
     public static void main() {
         // Załaduj bibliotekę OpenCV
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        Loader.load(opencv_java.class);
+
 
         // Inicjalizuj kamerę
         VideoCapture camera = new VideoCapture(1); // 0 oznacza domyślną kamerę //1 oznacza podpietą kamerkę
