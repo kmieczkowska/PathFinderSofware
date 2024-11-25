@@ -35,7 +35,7 @@ public class CameraDetector {
         }
 
         Mat frame = new Mat();          // Oryginalna klatka z kamery
-        String serverHost = "localhost"; // Adres serwera
+        String serverHost = "192.168.1.2"; // Adres serwera
         int serverPort = 12345;         // Port serwera
 
         try (Socket socket = new Socket(serverHost, serverPort);
@@ -74,12 +74,12 @@ public class CameraDetector {
                     }
 
                     // Wyświetlanie widoku kamerki lokalnie
-                    HighGui.imshow("Oryginalny obraz z zaznaczeniem", frame);
-
-                    // Wyjście po naciśnięciu klawisza 'q'
-                    if (HighGui.waitKey(30) == 'q') {
-                        break;
-                    }
+//                    HighGui.imshow("Oryginalny obraz z zaznaczeniem", frame);
+//
+//                    // Wyjście po naciśnięciu klawisza 'q'
+//                    if (HighGui.waitKey(30) == 'q') {
+//                        break;
+//                    }
                 } else {
                     System.out.println("Nie udało się odczytać klatki z kamerki");
                     break;
