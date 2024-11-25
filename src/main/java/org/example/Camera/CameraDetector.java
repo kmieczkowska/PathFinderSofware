@@ -26,7 +26,7 @@ public class CameraDetector {
 
 
         // Inicjalizuj kamerę
-        VideoCapture camera = new VideoCapture(1); // 0 oznacza domyślną kamerę //1 oznacza podpietą kamerkę
+        VideoCapture camera = new VideoCapture(0); // 0 oznacza domyślną kamerę //1 oznacza podpietą kamerkę
         if (!camera.isOpened()) {
             System.out.println("Nie udało się otworzyć kamerki");
             return;
@@ -64,7 +64,7 @@ public class CameraDetector {
                         Imgproc.rectangle(frame, boundingBox, new Scalar(0, 255, 0), 2);
 
                         System.out.println("X: " + boundingBox.x + "\n");
-                        if(boundingBox.x >= 15 && boundingBox.x <= 600){
+                        if(boundingBox.x >= 15 && boundingBox.x <= 601){
                             System.out.println("1");
                             robotController.sendCommand("1");
                         }
