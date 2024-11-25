@@ -26,6 +26,22 @@ public class ConfigurationLoader {
         return properties.getProperty("ROBOT_MODE");
     }
 
+    public String getRobotMoveFWD_15() {
+        return properties.getProperty("MOVE_FWD_15");
+    }
+
+    public String getRobotMoveFWD_600() {
+        return properties.getProperty("MOVE_FWD_600");
+    }
+
+    public String getRobotTurnLEFT_15() {
+        return properties.getProperty("TURN_LEFT_15");
+    }
+
+    public String getRobotMoveRIGHT_600() {
+        return properties.getProperty("TURN_RIGHT_600");
+    }
+
 
     // Main method for testing
     public static void main(String[] args) {

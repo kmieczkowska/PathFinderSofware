@@ -22,7 +22,7 @@ public class CameraDetector {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
         // Inicjalizuj kamerę
-        VideoCapture camera = new VideoCapture(0); // 0 oznacza domyślną kamerę
+        VideoCapture camera = new VideoCapture(1); // 0 oznacza domyślną kamerę //1 oznacza podpietą kamerkę
         if (!camera.isOpened()) {
             System.out.println("Nie udało się otworzyć kamerki");
             return;
@@ -60,29 +60,29 @@ public class CameraDetector {
                         Imgproc.rectangle(frame, boundingBox, new Scalar(0, 255, 0), 2);
 
                         System.out.println("X: " + boundingBox.x + "\n");
-                        if(boundingBox.x >= 250 && boundingBox.x <= 430){
-//                            System.out.println("1");
+                        if(boundingBox.x >= 15 && boundingBox.x <= 600){
+                            System.out.println("1");
                             robotController.sendCommand("1");
                         }
-                        else if(boundingBox.x < 249) {
-//                            System.out.println("3");
+                        else if(boundingBox.x < 15) {
+                            System.out.println("3");
                             robotController.sendCommand("3");
                         }
-                        else if(boundingBox.x > 430)
+                        else if(boundingBox.x > 600)
                         {
-//                            System.out.println("4");
+                            System.out.println("4");
                             robotController.sendCommand("4");
                         }
                     }
                 }
 
                 // Wyświetlanie widoku kamerki
-                //HighGui.imshow("Oryginalny obraz z zaznaczeniem", frame);
+                HighGui.imshow("Oryginalny obraz z zaznaczeniem", frame);
 
-//                // Wyjście po naciśnięciu klawisza 'q'
-//                if (HighGui.waitKey(30) == 'q') {
-//                    break;
-//                }
+                // Wyjście po naciśnięciu klawisza 'q'
+                if (HighGui.waitKey(30) == 'q') {
+                    break;
+                }
             } else {
                 System.out.println("Nie udało się odczytać klatki z kamerki");
                 break;
@@ -93,5 +93,4 @@ public class CameraDetector {
         camera.release();
         HighGui.destroyAllWindows();
     }
-
 }

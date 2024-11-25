@@ -26,6 +26,12 @@ public class Main {
         RobotController robotController = new RobotController(serialPort);
         CameraDetector detector = new CameraDetector(robotController);
 
+        int MOVE_FWD_15 = Integer.valueOf(config.getRobotMoveFWD_15());
+        int MOVE_FWD_600 = Integer.valueOf(config.getRobotMoveFWD_600());
+        int MOVE_LEFT_15 = Integer.valueOf(config.getRobotTurnLEFT_15());
+        int MOVE_RIGHT_600 = Integer.valueOf(config.getRobotMoveRIGHT_600());
+
+
         if(ROBOT_MODE == 0){detector.main();}
         else if(ROBOT_MODE == 1){ robotController.strategy_1();}
         else if(ROBOT_MODE == 2){ robotController.debug();}
