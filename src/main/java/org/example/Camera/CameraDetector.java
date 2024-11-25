@@ -81,12 +81,12 @@ public class CameraDetector {
                 }
 
                 // Wyświetlanie widoku kamerki
-                HighGui.imshow("Oryginalny obraz z zaznaczeniem", frame);
+//                HighGui.imshow("Oryginalny obraz z zaznaczeniem", frame);
 
                 // Wyjście po naciśnięciu klawisza 'q'
-                if (HighGui.waitKey(30) == 'q') {
-                    break;
-                }
+//                if (HighGui.waitKey(30) == 'q') {
+//                    break;
+//                }
             } else {
                 System.out.println("Nie udało się odczytać klatki z kamerki");
                 break;
