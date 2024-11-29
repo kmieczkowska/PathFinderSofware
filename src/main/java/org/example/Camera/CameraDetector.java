@@ -3,6 +3,7 @@ package org.example.Camera;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.opencv.opencv_java;
+import org.example.RobotController.IRobotController;
 import org.example.RobotController.RobotController;
 import org.opencv.core.*;
 import org.opencv.highgui.HighGui;
@@ -17,9 +18,9 @@ import java.util.List;
 
 public class CameraDetector {
 
-    public static RobotController robotController;
+    public static IRobotController robotController;
 
-    public CameraDetector(RobotController _robotController) {
+    public CameraDetector(IRobotController _robotController) {
         robotController = _robotController;
     }
 
@@ -35,8 +36,8 @@ public class CameraDetector {
         }
 
         Mat frame = new Mat();          // Oryginalna klatka z kamery
-        String serverHost = "192.168.1.2"; // Adres serwera
-        int serverPort = 12345;         // Port serwera
+        String serverHost = "localhost"; // Adres serwera
+        int serverPort = 1234;         // Port serwera
 
         try (Socket socket = new Socket(serverHost, serverPort);
              OutputStream outputStream = socket.getOutputStream()) {

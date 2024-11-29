@@ -8,7 +8,7 @@ import com.fazecast.jSerialComm.SerialPort;
  * @param
  * @return
  */
-public class RobotController {
+public class RobotController implements IRobotController {
     SerialPort serialPort;
 
     /**
@@ -25,23 +25,24 @@ public class RobotController {
      * emergencyStop
      * wysyla znak 0 na port szeregowy (w stm zatrzymanie robota)
      */
-    private void emergencyStop() {
+    @Override
+    public void emergencyStop() {
         serialPort.writeBytes("0\n".getBytes(), 2);
     }
-
-    private void moveForward() {
+    @Override
+    public void moveForward() {
         serialPort.writeBytes("1\n".getBytes(), 2);
     }
-
-    private void moveReverse(){
+    @Override
+    public void moveReverse(){
         serialPort.writeBytes("2\n".getBytes(), 2);
     }
-
-    private void turnLeft(){
+    @Override
+    public void turnLeft(){
         serialPort.writeBytes("3\n".getBytes(), 2);
     }
-
-    private void turnRight(){
+    @Override
+    public void turnRight(){
         serialPort.writeBytes("4\n".getBytes(), 2);
     }
 
@@ -50,7 +51,8 @@ public class RobotController {
      * @param motorA
      * @param motorB
      */
-    private void setMovmentSpeed(int motorA, int motorB){
+    @Override
+    public void setMovmentSpeed(int motorA, int motorB){
         String message = "5 " + Integer.toString(motorA) + " " + Integer.toString(motorB) +"\n";
         serialPort.writeBytes(message.getBytes(), message.length());
     }
@@ -60,7 +62,8 @@ public class RobotController {
      * Ustawienie predkosci na kazdym silniku
      * @return string z portu szeregowego
      */
-    private String getSensorValues() {
+    @Override
+    public String getSensorValues() {
 
         String command = "7\n";
         int bytesSent = serialPort.writeBytes(command.getBytes(), command.length());
@@ -71,7 +74,7 @@ public class RobotController {
      * Zatrzymanie robota na czas delayInt
      * @param delayInt
      */
-    private void delay(int delayInt){
+    public void delay(int delayInt){
         try {
             Thread.sleep(delayInt);
         } catch (InterruptedException e) {
