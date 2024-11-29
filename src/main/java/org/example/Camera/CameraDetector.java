@@ -25,7 +25,6 @@ public class CameraDetector {
     }
 
     public static void main() {
-        // Załaduj bibliotekę OpenCV
         Loader.load(opencv_java.class);
 
         // Inicjalizuj kamerę
@@ -65,21 +64,12 @@ public class CameraDetector {
                         if (boundingBox.width > 10 && boundingBox.height > 10) {
                             Imgproc.rectangle(frame, boundingBox, new Scalar(0, 255, 0), 2);
 
-                            System.out.println("X: "+boundingBox.x + "\n");
+                            //System.out.println("X: "+boundingBox.x + "\n");
 
-                            if(boundingBox.x >= 15 && boundingBox.x <= 600){
-                                System.out.println("1");
-                                robotController.sendCommand("1");
-                            }
-                            else if (boundingBox.x < 15){
-                                System.out.println("3");
-                                robotController.sendCommand("3");
-                            }
-                            else if(boundingBox.x > 600)
-                            {
-                                System.out.println("4");
-                                robotController.sendCommand("4");
-                            }
+                            if(boundingBox.x >= 15 && boundingBox.x <= 600) robotController.sendCommand("1");
+                            else if (boundingBox.x < 15) robotController.sendCommand("3");
+                            else if(boundingBox.x > 600) robotController.sendCommand("4");
+
                         }
                     }
 
