@@ -43,9 +43,9 @@ public class ImageProcesor {
 
                 //System.out.println("X: "+boundingBox.x + "\n");
 
-                if(boundingBox.x >= 15 && boundingBox.x <= 600) robotController.sendCommand("1");
-                else if (boundingBox.x < 15) robotController.sendCommand("3");
-                else if(boundingBox.x > 600) robotController.sendCommand("4");
+                if(boundingBox.x >= 15 && boundingBox.x <= 600) robotController.moveForward();
+                else if (boundingBox.x < 15) robotController.turnLeft();
+                else if(boundingBox.x > 600) robotController.turnRight();
 
             }
         }
