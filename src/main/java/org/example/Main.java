@@ -8,6 +8,7 @@ import org.example.RobotController.RobotController;
 import org.example.RobotController.VirtualRobotController;
 
 public class Main {
+
         public static void main(String[] args) {
 
         SerialPort serialPort = null;
@@ -27,28 +28,17 @@ public class Main {
                 serialPort.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
                 serialPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
                 initializionPort = serialPort.openPort();
-
-
-
         }
         catch (Exception e) {e.printStackTrace();}
 
+        //handler serial port situation
         if(initializionPort) robotController = new RobotController(serialPort);
         else robotController = new VirtualRobotController();
 
-
-
         CameraDetector detector = new CameraDetector(robotController);
-
-//        int MOVE_FWD_15 = Integer.valueOf(config.getRobotMoveFWD_15());
-//        int MOVE_FWD_600 = Integer.valueOf(config.getRobotMoveFWD_600());
-//        int MOVE_LEFT_15 = Integer.valueOf(config.getRobotTurnLEFT_15());
-//        int MOVE_RIGHT_600 = Integer.valueOf(config.getRobotMoveRIGHT_600());
-
 
         if(ROBOT_MODE == 0){detector.start();}
         else if(ROBOT_MODE == 1){ robotController.strategy_1();}
-
 
     }
 }

@@ -1,4 +1,4 @@
-package org.example.SerialPort;
+package org.example.OldClient;
 
 import com.fazecast.jSerialComm.SerialPort;
 

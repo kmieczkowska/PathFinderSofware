@@ -1,4 +1,4 @@
-package org.example.Examples;
+package org.example.OldTestsToRefactor;
 
 import com.fazecast.jSerialComm.SerialPort;
 

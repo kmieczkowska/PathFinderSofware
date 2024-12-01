@@ -4,11 +4,10 @@ package org.example.RobotController;
 import com.fazecast.jSerialComm.SerialPort;
 
 /**
- * Klasa stosowana do sterowania robotem
- * @param
- * @return
+ * Sterowanie robotem
  */
 public class RobotController implements IRobotController {
+    
     SerialPort serialPort;
 
     /**

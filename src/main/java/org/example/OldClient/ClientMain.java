@@ -1,4 +1,4 @@
-package org.example.Client;
+package org.example.OldClient;
 
 import com.fazecast.jSerialComm.SerialPort;
 import org.example.RobotController.RobotController;
@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 public class ClientMain {
 
-    //TODO przerobic metode
     public static void main(String[] args) {
         SerialPort serialPort = SerialPort.getCommPort("COM3");
         RobotController robotController = new RobotController(serialPort);

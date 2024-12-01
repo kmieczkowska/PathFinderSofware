@@ -1,4 +1,4 @@
-package org.example.ImageProcesor;
+package org.example.Camera;
 
 import org.example.RobotController.IRobotController;
 import org.opencv.core.Mat;
@@ -10,6 +10,9 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Przetwarzanie obrazu kamerki
+ */
 public class ImageProcesor {
 
     private IRobotController robotController;

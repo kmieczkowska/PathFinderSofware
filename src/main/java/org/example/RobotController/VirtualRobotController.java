@@ -1,5 +1,8 @@
 package org.example.RobotController;
 
+/**
+ * W przypadku gdy nie wykryto portu szeregowego - obsługa konsoli
+ */
 public class VirtualRobotController implements IRobotController {
     @Override
     public void emergencyStop() {

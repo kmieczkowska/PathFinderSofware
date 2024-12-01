@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Wczytanie pliku konfiguracyjnego
+ */
 public class ConfigurationLoader {
 
     private Properties properties;
@@ -24,22 +27,6 @@ public class ConfigurationLoader {
 
     public String getRobotMode() {
         return properties.getProperty("ROBOT_MODE");
-    }
-
-    public String getRobotMoveFWD_15() {
-        return properties.getProperty("MOVE_FWD_15");
-    }
-
-    public String getRobotMoveFWD_600() {
-        return properties.getProperty("MOVE_FWD_600");
-    }
-
-    public String getRobotTurnLEFT_15() {
-        return properties.getProperty("TURN_LEFT_15");
-    }
-
-    public String getRobotMoveRIGHT_600() {
-        return properties.getProperty("TURN_RIGHT_600");
     }
 
 

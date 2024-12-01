@@ -2,7 +2,6 @@ package org.example.Camera;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.opencv.opencv_java;
-import org.example.ImageProcesor.ImageProcesor;
 import org.example.RobotController.IRobotController;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -13,6 +12,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 
+/**
+ * Otwarcie socketu, kamerki, ustawienia kamerki
+ * @param
+ * @return
+ */
 public class CameraDetector {
 
     private IRobotController robotController;
@@ -49,7 +53,7 @@ public class CameraDetector {
 
                         while (capture.read(frame)) {
                             try {
-                                frame = imageProcesor.proses(frame);
+                                frame = imageProcesor.proses(frame); // przetwarzanie kamery
                                 // Encode frame as JPEG
                                 Imgcodecs.imencode(".jpg", frame, buffer);
                                 byte[] imageBytes = buffer.toArray();
