@@ -1,0 +1,19 @@
+while (true) {
+//                if (camera.read(frame)) {
+//
+//
+//                    // Przesyłanie klatki jako obraz JPEG
+//                    byte[] imageBytes = matToBytes(frame);
+//                    if (imageBytes != null) {
+//                        outputStream.write(imageBytes);
+//                        outputStream.flush();
+//                    }
+//
+//                } else {
+//                    System.out.println("Nie udało się odczytać klatki z kamerki");
+//                    break;
+//                }
+//
+//
+//            }
+//        }

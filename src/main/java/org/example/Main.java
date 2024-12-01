@@ -10,7 +10,7 @@ import org.example.RobotController.VirtualRobotController;
 public class Main {
         public static void main(String[] args) {
 
-        SerialPort serialPort;
+        SerialPort serialPort = null;
 
         ConfigurationLoader config = new ConfigurationLoader("configuration.properties");
 
@@ -19,22 +19,22 @@ public class Main {
 
         IRobotController robotController;
 
+        boolean initializionPort = false;
+
         try {
                 if(SERIAL_LOCAL_MODE ==  1){serialPort = SerialPort.getCommPort("COM3");}
                 else{ serialPort = SerialPort.getCommPort("/dev/ttyACM0"); }
-
                 serialPort.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
                 serialPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
-                serialPort.openPort();
-                robotController = new RobotController(serialPort);
-        }
-        catch (Exception e) {
-                e.printStackTrace();
-                robotController = new VirtualRobotController();
+                initializionPort = serialPort.openPort();
+
+
 
         }
+        catch (Exception e) {e.printStackTrace();}
 
-
+        if(initializionPort) robotController = new RobotController(serialPort);
+        else robotController = new VirtualRobotController();
 
 
 
@@ -46,7 +46,7 @@ public class Main {
 //        int MOVE_RIGHT_600 = Integer.valueOf(config.getRobotMoveRIGHT_600());
 
 
-        if(ROBOT_MODE == 0){detector.main();}
+        if(ROBOT_MODE == 0){detector.start();}
         else if(ROBOT_MODE == 1){ robotController.strategy_1();}
 
 
