@@ -47,8 +47,8 @@ public class RobotController implements IRobotController {
 
     /**
      * Ustawienie predkosci na kazdym silniku
-     * @param motorA
-     * @param motorB
+     * @param motorA -100 100
+     * @param motorB -100 100
      */
     @Override
     public void setMovmentSpeed(int motorA, int motorB){
@@ -73,6 +73,7 @@ public class RobotController implements IRobotController {
      * Zatrzymanie robota na czas delayInt
      * @param delayInt
      */
+    @Override
     public void delay(int delayInt){
         try {
             Thread.sleep(delayInt);

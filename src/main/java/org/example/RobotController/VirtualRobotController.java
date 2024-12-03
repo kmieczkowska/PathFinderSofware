@@ -31,7 +31,7 @@ public class VirtualRobotController implements IRobotController {
 
     @Override
     public void setMovmentSpeed(int motorA, int motorB) {
-            System.out.println("Setting movement speed");
+        System.out.println("Setting movement speed");
     }
 
     @Override
@@ -47,5 +47,14 @@ public class VirtualRobotController implements IRobotController {
     @Override
     public void sendCommand(String command) {
         System.out.println("Sending command: " + command);
+    }
+
+    @Override
+    public void delay(int delayInt) {
+        try {
+            Thread.sleep(delayInt);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

@@ -1,10 +1,7 @@
 package org.example.Camera;
 
 import org.example.RobotController.IRobotController;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
+import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
@@ -19,6 +16,150 @@ public class ImageProcesor {
 
     public ImageProcesor(IRobotController _robotController) {
         robotController = _robotController;
+    }
+
+    /**
+     * Dzieli ekran kamery na cztery równe części i oznacza je jako A, B, C, D.
+     *
+     * @param frame Obraz z kamerki.
+     * @return Obraz z naniesionym podziałem i etykietami.
+     */
+    public Mat divideAndLabelScreen(Mat frame) {
+
+        // Dzielenie obrazu na 4 części
+        int width = frame.width();
+        int height = frame.height();
+
+        // Linie podziału
+        int midX = width / 2;
+        int midY = height / 2;
+
+//        System.out.println("midX: " + midX); //320
+//        System.out.println("midY: " + midY); //240
+
+        //region Konwersja obrazu na skalę szarości i binaryzacja
+
+        Mat grayFrame = new Mat();
+        Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY);
+
+        Mat binaryFrame = new Mat();
+        Imgproc.threshold(grayFrame, binaryFrame, 50, 255, Imgproc.THRESH_BINARY_INV); // prog
+
+        // Konwersja binaryzowanego obrazu z powrotem na format BGR, aby móc na nim rysować linie i etykiety
+        Mat outputFrame = new Mat();
+        Imgproc.cvtColor(binaryFrame, outputFrame, Imgproc.COLOR_GRAY2BGR);
+        //endregion
+
+        //region Obliczenie liczby czarnych pikseli dla każdej ćwiartki
+        Mat sectionA = binaryFrame.submat(0, midY, 0, midX); // Górna lewa
+        Mat sectionB = binaryFrame.submat(0, midY, midX, width); // Górna prawa
+        Mat sectionC = binaryFrame.submat(midY, height, 0, midX); // Dolna lewa
+        Mat sectionD = binaryFrame.submat(midY, height, midX, width); // Dolna prawa
+
+        int blackPixelsA = Core.countNonZero(sectionA);
+        int blackPixelsB = Core.countNonZero(sectionB);
+        int blackPixelsC = Core.countNonZero(sectionC);
+        int blackPixelsD = Core.countNonZero(sectionD);
+
+//        System.out.println("Czarna liczba pikseli w A: " + blackPixelsA);
+//        System.out.println("Czarna liczba pikseli w B: " + blackPixelsB);
+//        System.out.println("Czarna liczba pikseli w C: " + blackPixelsC);
+//        System.out.println("Czarna liczba pikseli w D: " + blackPixelsD);
+
+        // Porównanie liczby czarnych pikseli
+        int leftBlackPixels = blackPixelsA + blackPixelsC;
+        int rightBlackPixels = blackPixelsB + blackPixelsD;
+
+//        System.out.println("Czarna liczba pikseli po lewej stronie (A + C): " + leftBlackPixels);
+//        System.out.println("Czarna liczba pikseli po prawej stronie (B + D): " + rightBlackPixels);
+
+        //endregion
+
+        //region Skrety
+
+        String comparisonResult;
+
+        //region TODO Punkt srodkowy - strasznie glupie - metoda szukaj trasy (patrz lewo, prawo, do przodu)
+
+        // Zliczanie drogi poza czarnymi pikselami
+        int distanceTravelled = 0;
+        boolean onLine = true; // robot na linii
+
+        // Sprawdzenie, czy punkt przecięcia (środek obrazu) ma czarne piksele
+        int SPixel = (int) binaryFrame.get(midY, midX)[0]; // Sprawdzamy wartość piksela
+
+        if (SPixel == 0) { // 0 to czarna wartość piksela
+            distanceTravelled++;
+            System.out.println("dT: " + distanceTravelled);
+            robotController.emergencyStop();
+            robotController.moveReverse(); //TODO w parametrze przekazac distanceTravelled
+        } else {
+            distanceTravelled = 0;  // Resetujemy zliczanie drogi
+            onLine = true;
+        }
+
+        //endregion
+
+
+        //region TODO moveForward()
+
+        //endregion
+
+        //punkt srodkowy szuka czarnych pikseli
+        //jesli prawo to B czy D, na tej podstawie ustala sile silnikow (skret)
+        // Porównanie: Jeśli po lewej stronie (A + C) więcej czarnych pikseli
+
+        // Lewa strona (A + C)
+        if (leftBlackPixels > rightBlackPixels) {
+            comparisonResult = "A+C lewo";  // Więcej czarnych pikseli po lewej stronie
+            if(blackPixelsA > blackPixelsC)
+            {
+                //TODO skrec w lewo - maly kat
+                robotController.delay(20);
+            }
+            else if(blackPixelsC > blackPixelsA){
+                robotController.turnLeft();
+                //TODO skrec w lewo szybciej - duzy kat
+            }
+        }
+        // Prawa strona (B + D)
+        else if (rightBlackPixels > leftBlackPixels) {
+            comparisonResult = "B+D prawo";  // Więcej czarnych pikseli po prawej stronie
+            robotController.turnRight();
+            if(blackPixelsB > blackPixelsD)
+            {
+                //TODO skrec w prawo - maly kat
+                robotController.turnRight();
+            }
+            else if(blackPixelsD > blackPixelsB)
+            {
+                //TODO skrec w prawo szybciej - duzy kat
+                robotController.turnRight();
+            }
+        }
+        else {
+            comparisonResult = "same black pixels value";
+            robotController.moveForward(); // maja tyle samo
+        }
+
+
+        //endregion
+
+        //region Rysowanie linii i etykiet
+
+        Imgproc.line(outputFrame, new Point(midX, 0), new Point(midX, height), new Scalar(0, 0, 255), 2); // Pionowa linia
+        Imgproc.line(outputFrame, new Point(0, midY), new Point(width, midY), new Scalar(0, 0, 255), 2); // Pozioma linia
+
+        Imgproc.putText(outputFrame, "A", new Point(midX / 2, midY / 2), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+        Imgproc.putText(outputFrame, "B", new Point(midX + midX / 2, midY / 2), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+        Imgproc.putText(outputFrame, "C", new Point(midX / 2, midY + midY / 2), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+        Imgproc.putText(outputFrame, "D", new Point(midX + midX / 2, midY + midY / 2), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+
+        Imgproc.putText(outputFrame, comparisonResult, new Point(10, 30), Imgproc.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar(0, 255, 0), 2);
+
+        //endregion
+
+        return outputFrame;
     }
 
     public Mat proses(Mat frame){
@@ -46,7 +187,6 @@ public class ImageProcesor {
                 if(boundingBox.x >= 15 && boundingBox.x <= 600) robotController.moveForward();
                 else if (boundingBox.x < 15) robotController.turnLeft();
                 else if(boundingBox.x > 600) robotController.turnRight();
-
             }
         }
         return frame;

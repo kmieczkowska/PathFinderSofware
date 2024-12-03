@@ -53,7 +53,7 @@ public class CameraDetector {
 
                         while (capture.read(frame)) {
                             try {
-                                frame = imageProcesor.proses(frame); // przetwarzanie kamery
+                                frame = imageProcesor.divideAndLabelScreen(frame); // przetwarzanie kamery
                                 // Encode frame as JPEG
                                 Imgcodecs.imencode(".jpg", frame, buffer);
                                 byte[] imageBytes = buffer.toArray();

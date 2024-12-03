@@ -23,6 +23,8 @@ public interface IRobotController {
 
     public void sendCommand(String command);
 
+    public void delay(int delayInt);
+
 
 
 }
