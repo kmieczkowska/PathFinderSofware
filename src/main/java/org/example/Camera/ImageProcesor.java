@@ -80,40 +80,41 @@ public class ImageProcesor {
         if (SPixel == 255) {
             robotController.setMovmentSpeed(50, 50);
         } else {
+            robotController.setMovmentSpeed(50, 50);
 
-            int closestX = -1;
-            int closestY = -1;
-            double minDistance = Double.MAX_VALUE;
-
-            // Przeszukiwanie obrazu w celu znalezienia najbliższego białego piksela
-            for (int y = 0; y < binaryFrame.rows(); y++) {
-                for (int x = 0; x < binaryFrame.cols(); x++) {
-                    if ((int) binaryFrame.get(y, x)[0] == 255) { // Jeśli piksel jest biały
-                        // Oblicz odległość euklidesową od centralnego punktu (midX, midY)
-                        double distance = Math.sqrt(Math.pow(midX - x, 2) + Math.pow(midY - y, 2));
-                        if (distance < minDistance) {
-                            minDistance = distance;
-                            closestX = x;
-                            closestY = y;
-                        }
-                    }
-                }
-
-            }
-            if (closestX != -1 && closestY != -1) {
-                System.out.println("Najbliższy biały piksel znaleziony na pozycji: (" + closestX + ", " + closestY + ").");
-            }
-
-            // Określenie kierunku na podstawie sekcji, w której znajduje się najbliższy biały piksel
-            if (closestX < midX && closestY < midY) { // Sekcja A
-                robotController.setMovmentSpeed(-30, 30); // Skręt w lewo
-            } else if (closestX >= midX && closestY < midY) { // Sekcja B
-                robotController.setMovmentSpeed(30, -30); // Skręt w prawo
-            } else if (closestX < midX && closestY >= midY) { // Sekcja C
-                robotController.setMovmentSpeed(-50, 50); // Szybszy skręt w lewo
-            } else if (closestX >= midX && closestY >= midY) { // Sekcja D
-                robotController.setMovmentSpeed(50, -50); // Szybszy skręt w prawo
-            }
+//            int closestX = -1;
+//            int closestY = -1;
+//            double minDistance = Double.MAX_VALUE;
+//
+//            // Przeszukiwanie obrazu w celu znalezienia najbliższego białego piksela
+//            for (int y = 0; y < binaryFrame.rows(); y++) {
+//                for (int x = 0; x < binaryFrame.cols(); x++) {
+//                    if ((int) binaryFrame.get(y, x)[0] == 255) { // Jeśli piksel jest biały
+//                        // Oblicz odległość euklidesową od centralnego punktu (midX, midY)
+//                        double distance = Math.sqrt(Math.pow(midX - x, 2) + Math.pow(midY - y, 2));
+//                        if (distance < minDistance) {
+//                            minDistance = distance;
+//                            closestX = x;
+//                            closestY = y;
+//                        }
+//                    }
+//                }
+//
+//            }
+//            if (closestX != -1 && closestY != -1) {
+//                System.out.println("Najbliższy biały piksel znaleziony na pozycji: (" + closestX + ", " + closestY + ").");
+//            }
+//
+//            // Określenie kierunku na podstawie sekcji, w której znajduje się najbliższy biały piksel
+//            if (closestX < midX && closestY < midY) { // Sekcja A
+//                robotController.setMovmentSpeed(-30, 30); // Skręt w lewo
+//            } else if (closestX >= midX && closestY < midY) { // Sekcja B
+//                robotController.setMovmentSpeed(30, -30); // Skręt w prawo
+//            } else if (closestX < midX && closestY >= midY) { // Sekcja C
+//                robotController.setMovmentSpeed(-50, 50); // Szybszy skręt w lewo
+//            } else if (closestX >= midX && closestY >= midY) { // Sekcja D
+//                robotController.setMovmentSpeed(50, -50); // Szybszy skręt w prawo
+//            }
 
         }
 
