@@ -77,7 +77,7 @@ public class ImageProcesor {
 
         //region Ruch do przodu / zjechanie ze sciezki
         int SPixel = (int) binaryFrame.get(midY, midX)[0];
-        if (SPixel == 255) {
+        if (SPixel == 255 || SPixel == 0) {
             robotController.setMovmentSpeed(50, 50);
         } else {
             robotController.setMovmentSpeed(50, 50);
