@@ -88,30 +88,8 @@ public class ImageProcesor {
 
         String comparisonResult;
 
-        //region TODO Punkt srodkowy - strasznie glupie - metoda szukaj trasy (patrz lewo, prawo, do przodu)
-
-        // Zliczanie drogi poza czarnymi pikselami
-        int distanceTravelled = 0;
-        boolean onLine = true; // robot na linii
-
-        // Sprawdzenie, czy punkt przecięcia (środek obrazu) ma czarne piksele
-        int SPixel = (int) binaryFrame.get(midY, midX)[0]; // Sprawdzamy wartość piksela
-
-        if (SPixel == 0) { // 0 to czarna wartość piksela
-            distanceTravelled++;
-            System.out.println("dT: " + distanceTravelled);
-            if(isRunning) robotController.moveReverse(); //TODO w parametrze przekazac distanceTravelled
-
-        } else {
-            distanceTravelled = 0;  // Resetujemy zliczanie drogi
-            onLine = true;
-        }
-
-        //endregion
-
 
         //region TODO moveForward()
-
         //endregion
 
         //punkt srodkowy szuka czarnych pikseli
@@ -121,36 +99,31 @@ public class ImageProcesor {
         // Lewa strona (A + C)
         if (leftBlackPixels > rightBlackPixels) {
             comparisonResult = "A+C lewo";  // Więcej czarnych pikseli po lewej stronie
-            if(blackPixelsA > blackPixelsC)
-            {
-                //TODO skrec w lewo - maly kat
-                if(isRunning)robotController.delay(20);
-            }
-            else if(blackPixelsC > blackPixelsA){
-                if(isRunning)robotController.turnLeft();
-                //TODO skrec w lewo szybciej - duzy kat
+            if (blackPixelsA > blackPixelsC) {
+                comparisonResult = "A";
+                robotController.setMovmentSpeed(40, 50);
+                robotController.delay(20);
+            } else if (blackPixelsC > blackPixelsA) {
+                robotController.setMovmentSpeed(30, 70);
             }
         }
         // Prawa strona (B + D)
         else if (rightBlackPixels > leftBlackPixels) {
             comparisonResult = "B+D prawo";  // Więcej czarnych pikseli po prawej stronie
-            if(isRunning)robotController.turnRight();
-            if(blackPixelsB > blackPixelsD)
-            {
-                //TODO skrec w prawo - maly kat
-                if(isRunning)robotController.turnRight();
+            robotController.turnRight();
+            if (blackPixelsB > blackPixelsD) {
+                comparisonResult = "B";
+//                robotController.turnRight();
+                robotController.setMovmentSpeed(90, 0);
+            } else if (blackPixelsD > blackPixelsB) {
+                comparisonResult = "D";
+//                robotController.turnRight();
+                robotController.setMovmentSpeed(0, -90);
             }
-            else if(blackPixelsD > blackPixelsB)
-            {
-                //TODO skrec w prawo szybciej - duzy kat
-                if(isRunning)robotController.turnRight();
-            }
-        }
-        else {
+        } else {
             comparisonResult = "same black pixels value";
-            if(isRunning)robotController.moveForward(); // maja tyle samo
+            robotController.moveForward(); // maja tyle samo
         }
-
 
         //endregion
 
