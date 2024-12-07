@@ -121,15 +121,16 @@ public class ImageProcesor {
             //endregion
         String comparisonResult;
 
+        int direction =1;
             // Lewa strona (A + C)
             if (leftBlackPixels > rightBlackPixels) {
                 comparisonResult = "A+C lewo";  // Więcej czarnych pikseli po lewej stronie
                 if (blackPixelsA > blackPixelsC) {
                     comparisonResult = "A";
-                    robotController.setMovmentSpeed(40, 50);
+                    robotController.setMovmentSpeed(-50, 40);
                     robotController.delay(20);
                 } else if (blackPixelsC > blackPixelsA) {
-                    robotController.setMovmentSpeed(30, 70);
+                    robotController.setMovmentSpeed(-70, 30);
                 }
             }
 
@@ -140,11 +141,11 @@ public class ImageProcesor {
                 if (blackPixelsB > blackPixelsD) {
                     comparisonResult = "B";
 //                robotController.turnRight();
-                    robotController.setMovmentSpeed(50, 40);
+                    robotController.setMovmentSpeed(40*direction, -50);
                 } else if (blackPixelsD > blackPixelsB) {
                     comparisonResult = "D";
 //                robotController.turnRight();
-                    robotController.setMovmentSpeed(70, 30);
+                    robotController.setMovmentSpeed(30, -70);
                 }
             } else {
                 comparisonResult = "same black pixels value";
