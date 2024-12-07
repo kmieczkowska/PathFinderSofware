@@ -14,6 +14,15 @@ public class ImageProcesor {
 
     private IRobotController robotController;
 
+    private boolean isRunning = true;
+
+    public void setStart(){
+        isRunning = true;
+    }
+    public void setStop(){
+        isRunning = false;
+    }
+
     public ImageProcesor(IRobotController _robotController) {
         robotController = _robotController;
     }
@@ -91,8 +100,8 @@ public class ImageProcesor {
         if (SPixel == 0) { // 0 to czarna wartość piksela
             distanceTravelled++;
             System.out.println("dT: " + distanceTravelled);
-            robotController.emergencyStop();
-            robotController.moveReverse(); //TODO w parametrze przekazac distanceTravelled
+            if(isRunning) robotController.moveReverse(); //TODO w parametrze przekazac distanceTravelled
+
         } else {
             distanceTravelled = 0;  // Resetujemy zliczanie drogi
             onLine = true;
@@ -115,31 +124,31 @@ public class ImageProcesor {
             if(blackPixelsA > blackPixelsC)
             {
                 //TODO skrec w lewo - maly kat
-                robotController.delay(20);
+                if(isRunning)robotController.delay(20);
             }
             else if(blackPixelsC > blackPixelsA){
-                robotController.turnLeft();
+                if(isRunning)robotController.turnLeft();
                 //TODO skrec w lewo szybciej - duzy kat
             }
         }
         // Prawa strona (B + D)
         else if (rightBlackPixels > leftBlackPixels) {
             comparisonResult = "B+D prawo";  // Więcej czarnych pikseli po prawej stronie
-            robotController.turnRight();
+            if(isRunning)robotController.turnRight();
             if(blackPixelsB > blackPixelsD)
             {
                 //TODO skrec w prawo - maly kat
-                robotController.turnRight();
+                if(isRunning)robotController.turnRight();
             }
             else if(blackPixelsD > blackPixelsB)
             {
                 //TODO skrec w prawo szybciej - duzy kat
-                robotController.turnRight();
+                if(isRunning)robotController.turnRight();
             }
         }
         else {
             comparisonResult = "same black pixels value";
-            robotController.moveForward(); // maja tyle samo
+            if(isRunning)robotController.moveForward(); // maja tyle samo
         }
 
 
@@ -185,8 +194,8 @@ public class ImageProcesor {
                 //System.out.println("X: "+boundingBox.x + "\n");
 
                 if(boundingBox.x >= 15 && boundingBox.x <= 600) robotController.moveForward();
-                else if (boundingBox.x < 15) robotController.turnLeft();
-                else if(boundingBox.x > 600) robotController.turnRight();
+                else if (boundingBox.x < 15) if(isRunning) robotController.turnLeft();
+                else if(boundingBox.x > 600) if(isRunning) robotController.turnRight();
             }
         }
         return frame;

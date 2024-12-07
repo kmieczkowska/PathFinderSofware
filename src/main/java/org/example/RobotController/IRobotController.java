@@ -5,6 +5,7 @@ package org.example.RobotController;
  */
 public interface IRobotController {
 
+
     public void emergencyStop();
 
     public void moveForward();
