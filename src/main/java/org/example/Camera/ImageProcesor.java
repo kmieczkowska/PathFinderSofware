@@ -33,7 +33,7 @@ public class ImageProcesor {
      * @param frame Obraz z kamerki.
      * @return Obraz z naniesionym podziałem i etykietami.
      */
-    public Mat divideAndLabelScreen(Mat frame) {
+    public Mat strategy1(Mat frame) {
 
         // Dzielenie obrazu na 4 części
         int width = frame.width();
@@ -142,6 +142,10 @@ public class ImageProcesor {
         //endregion
 
         return outputFrame;
+    }
+
+    public Mat strategy2(Mat frame){
+        return frame;
     }
 
     public Mat proses(Mat frame){

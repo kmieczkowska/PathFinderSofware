@@ -7,7 +7,6 @@ import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
@@ -60,7 +59,7 @@ public class CameraDetector {
                         MatOfByte buffer = new MatOfByte();
                         while (capture.read(frame)) {
                             try {
-                                frame = imageProcesor.divideAndLabelScreen(frame); // przetwarzanie kamery
+                                frame = imageProcesor.strategy1(frame); // przetwarzanie kamery
                                 // Encode frame as JPEG
                                 Imgcodecs.imencode(".jpg", frame, buffer);
                                 byte[] imageBytes = buffer.toArray();
