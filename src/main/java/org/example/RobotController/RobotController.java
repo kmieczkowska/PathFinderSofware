@@ -24,13 +24,13 @@ public class RobotController implements IRobotController {
     }
 
     @Override
-    public void setMotorADirectionForward() {motorADirection = 1;}
+    public void setMotorADirectionForward() {motorADirection = 0;}
     @Override
-    public void setMotorADirectionBackward() {motorADirection = -1;}
+    public void setMotorADirectionBackward() {motorADirection = 1;}
     @Override
     public void setMotorBDirectionForward() {motorBDirection = 1;}
     @Override
-    public void setMotorBDirectionBackward() {motorBDirection = -1;}
+    public void setMotorBDirectionBackward() {motorBDirection = 1;}
 
     /**
      * RobotController
@@ -69,29 +69,29 @@ public class RobotController implements IRobotController {
 
         @Override
     public void emergencyStop() {
-        setMovmentSpeed(motorADirection * 0,motorBDirection * 0);
+        setMovmentSpeed(0,0);
     }
     @Override
     public void moveForward() {
-        setMovmentSpeed(motorADirection * 100,motorBDirection * 100);
+        setMovmentSpeed((motorADirection*100) + 100,(motorBDirection *100)+ 100);
     }
     @Override
     public void moveReverse(){
-        setMovmentSpeed(motorADirection * -100,motorBDirection * -100);
+        setMovmentSpeed((motorADirection*100) + 100,(motorBDirection *100)+ 100);
     }
     @Override
     public void turnLeft(){
-        setMovmentSpeed(motorADirection * -100,motorBDirection * 100);
+        setMovmentSpeed((motorADirection*100) + 100,(motorBDirection *100)+ 100);
     }
     @Override
     public void turnRight(){
-        setMovmentSpeed(motorADirection * 100,motorBDirection * -100);
+        setMovmentSpeed((motorADirection*100) + 100,(motorBDirection *100)+ 100);
     }
 
     /**
      * Ustawienie predkosci na kazdym silniku
-     * @param motorA -100 100
-     * @param motorB -100 100
+     * @param motorA 100 200
+     * @param motorB 100 200
      */
     @Override
     public void setMovmentSpeed(int motorA, int motorB){
@@ -127,12 +127,12 @@ public class RobotController implements IRobotController {
     //lewe koło jedzie do przodu 100%
     @Override
     public void leftWheelForward() {
-        setMovmentSpeed(motorADirection * 100,0);
+        setMovmentSpeed((motorADirection*100) + 100,0);
     }
     //prawe koło jedzie do przodu 100%
     @Override
     public void rightWheelForward() {
-        setMovmentSpeed(0,motorBDirection * 100);
+        setMovmentSpeed(0,(motorBDirection*100) + 100);
     }
 
     public void sendCommand(String command){
