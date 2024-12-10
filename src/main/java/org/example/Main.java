@@ -17,6 +17,8 @@ public class Main {
 
         int SERIAL_LOCAL_MODE = Integer.valueOf(config.getSerialMode());
         int ROBOT_MODE = Integer.valueOf(config.getRobotMode());
+        int MOTOR_A_DIRECTION = Integer.valueOf(config.getMotorADirection());
+        int MOTOR_B_DIRECTION = Integer.valueOf(config.getMotorBDirection());
 
         IRobotController robotController;
 
@@ -34,6 +36,9 @@ public class Main {
         //handler serial port situation
         if(initializionPort) robotController = new RobotController(serialPort);
         else robotController = new VirtualRobotController();
+
+        robotController.setMotorADirection(MOTOR_A_DIRECTION);
+        robotController.setMotorBDirection(MOTOR_B_DIRECTION);
 
         CameraDetector detector = new CameraDetector(robotController);
 

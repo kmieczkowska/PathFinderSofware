@@ -145,7 +145,56 @@ public class ImageProcesor {
     }
 
     public Mat strategy2(Mat frame){
-        return frame;
+        // Dzielenie obrazu na 4 części
+        int width = frame.width();
+        int height = frame.height();
+
+        String comparisonResult;
+
+        // Linie podziału
+        int midX = width / 2;
+        int midY = height / 2;
+
+
+        //region Konwersja obrazu na skalę szarości i binaryzacja
+
+        Mat grayFrame = new Mat();
+        Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY);
+
+        Mat binaryFrame = new Mat();
+        Imgproc.threshold(grayFrame, binaryFrame, 50, 255, Imgproc.THRESH_BINARY_INV); // prog
+
+        // Konwersja binaryzowanego obrazu z powrotem na format BGR, aby móc na nim rysować linie i etykiety
+        Mat outputFrame = new Mat();
+        Imgproc.cvtColor(binaryFrame, outputFrame, Imgproc.COLOR_GRAY2BGR);
+
+
+        Mat sectionA = binaryFrame.submat(0, height, 0, midX); // Górna lewa
+        Mat sectionB = binaryFrame.submat(0, height, midX, width); // Górna prawa
+
+
+        int blackPixelsA = Core.countNonZero(sectionA);
+        int blackPixelsB = Core.countNonZero(sectionB);
+
+        if (blackPixelsA > blackPixelsB) {
+            robotController.leftWheelForward();
+            comparisonResult = "Lewo";
+        }
+        else if (blackPixelsB > blackPixelsA) {
+            robotController.rightWheelForward();
+            comparisonResult = "Prawo";
+        }
+        else{
+            comparisonResult = "Jazda";
+            robotController.moveForward();
+        }
+
+        Imgproc.line(outputFrame, new Point(midX, 0), new Point(midX, height), new Scalar(0, 0, 255), 2); // Pionowa linia
+        Imgproc.putText(outputFrame, "A", new Point(midX / 2, midY), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+        Imgproc.putText(outputFrame, "B", new Point(midX + midX / 2, midY), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+        Imgproc.putText(outputFrame, comparisonResult, new Point(10, 30), Imgproc.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar(0, 255, 0), 2);
+
+        return outputFrame;
     }
 
     public Mat proses(Mat frame){

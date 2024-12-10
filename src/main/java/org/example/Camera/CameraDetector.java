@@ -59,7 +59,7 @@ public class CameraDetector {
                         MatOfByte buffer = new MatOfByte();
                         while (capture.read(frame)) {
                             try {
-                                frame = imageProcesor.strategy1(frame); // przetwarzanie kamery
+                                frame = imageProcesor.strategy2(frame); // przetwarzanie kamery
                                 // Encode frame as JPEG
                                 Imgcodecs.imencode(".jpg", frame, buffer);
                                 byte[] imageBytes = buffer.toArray();

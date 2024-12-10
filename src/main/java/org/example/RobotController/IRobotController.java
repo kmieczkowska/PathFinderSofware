@@ -5,8 +5,18 @@ package org.example.RobotController;
  */
 public interface IRobotController {
 
+    public void setMotorADirection(int direction);
+    public void setMotorBDirection(int direction);
+
+    public void setMotorADirectionForward();
+    public void setMotorADirectionBackward();
+
+    public void setMotorBDirectionForward();
+    public void setMotorBDirectionBackward();
 
     public void emergencyStop();
+
+    public void setMovmentSpeed(int motorA, int motorB);
 
     public void moveForward();
 
@@ -16,8 +26,6 @@ public interface IRobotController {
 
     public void turnRight();
 
-    public void setMovmentSpeed(int motorA, int motorB);
-
     public void strategy_1();
 
     public String getSensorValues();
@@ -25,6 +33,9 @@ public interface IRobotController {
     public void sendCommand(String command);
 
     public void delay(int delayInt);
+
+    public void leftWheelForward();
+    public void rightWheelForward();
 
 
 

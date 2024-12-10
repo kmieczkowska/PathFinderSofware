@@ -10,6 +10,28 @@ public class RobotController implements IRobotController {
     
     SerialPort serialPort;
 
+    private int motorADirection = 1;
+    private int motorBDirection = 1;
+
+    @Override
+    public void setMotorADirection(int direction) {
+        motorADirection = direction;
+    }
+
+    @Override
+    public void setMotorBDirection(int direction) {
+        motorBDirection = direction;
+    }
+
+    @Override
+    public void setMotorADirectionForward() {motorADirection = 1;}
+    @Override
+    public void setMotorADirectionBackward() {motorADirection = -1;}
+    @Override
+    public void setMotorBDirectionForward() {motorBDirection = 1;}
+    @Override
+    public void setMotorBDirectionBackward() {motorBDirection = -1;}
+
     /**
      * RobotController
      * Inicjowanie serialPort
@@ -24,25 +46,46 @@ public class RobotController implements IRobotController {
      * emergencyStop
      * wysyla znak 0 na port szeregowy (w stm zatrzymanie robota)
      */
-    @Override
+//    @Override
+//    public void emergencyStop() {
+//        serialPort.writeBytes("0\n".getBytes(), 2);
+//    }
+//    @Override
+//    public void moveForward() {
+//        serialPort.writeBytes("1\n".getBytes(), 2);
+//    }
+//    @Override
+//    public void moveReverse(){
+//        serialPort.writeBytes("2\n".getBytes(), 2);
+//    }
+//    @Override
+//    public void turnLeft(){
+//        serialPort.writeBytes("3\n".getBytes(), 2);
+//    }
+//    @Override
+//    public void turnRight(){
+//        serialPort.writeBytes("4\n".getBytes(), 2);
+//    }
+
+        @Override
     public void emergencyStop() {
-        serialPort.writeBytes("0\n".getBytes(), 2);
+        setMovmentSpeed(motorADirection * 0,motorBDirection * 0);
     }
     @Override
     public void moveForward() {
-        serialPort.writeBytes("1\n".getBytes(), 2);
+        setMovmentSpeed(motorADirection * 100,motorBDirection * 100);
     }
     @Override
     public void moveReverse(){
-        serialPort.writeBytes("2\n".getBytes(), 2);
+        setMovmentSpeed(motorADirection * -100,motorBDirection * -100);
     }
     @Override
     public void turnLeft(){
-        serialPort.writeBytes("3\n".getBytes(), 2);
+        setMovmentSpeed(motorADirection * -100,motorBDirection * 100);
     }
     @Override
     public void turnRight(){
-        serialPort.writeBytes("4\n".getBytes(), 2);
+        setMovmentSpeed(motorADirection * 100,motorBDirection * -100);
     }
 
     /**
@@ -80,6 +123,16 @@ public class RobotController implements IRobotController {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+    }
+    //lewe koło jedzie do przodu 100%
+    @Override
+    public void leftWheelForward() {
+        setMovmentSpeed(100,0);
+    }
+    //prawe koło jedzie do przodu 100%
+    @Override
+    public void rightWheelForward() {
+        setMovmentSpeed(0,100);
     }
 
     public void sendCommand(String command){

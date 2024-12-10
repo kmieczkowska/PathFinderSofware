@@ -29,6 +29,14 @@ public class ConfigurationLoader {
         return properties.getProperty("ROBOT_MODE");
     }
 
+    public String getMotorADirection() {
+        return properties.getProperty("MOTOR_A_DIRECTION");
+    }
+
+    public String getMotorBDirection() {
+        return properties.getProperty("MOTOR_B_DIRECTION");
+    }
+
 
     // Main method for testing
     public static void main(String[] args) {

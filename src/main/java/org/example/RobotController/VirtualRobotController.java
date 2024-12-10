@@ -5,6 +5,29 @@ package org.example.RobotController;
  */
 public class VirtualRobotController implements IRobotController {
 
+    private int motorADirection = 1;
+    private int motorBDirection = 1;
+
+    @Override
+    public void setMotorADirection(int direction) {
+        motorADirection = direction;
+    }
+
+    @Override
+    public void setMotorBDirection(int direction) {
+        motorBDirection = direction;
+    }
+
+
+
+    @Override
+    public void setMotorADirectionForward() {motorADirection = 1;}
+    @Override
+    public void setMotorADirectionBackward() {motorADirection = -1;}
+    @Override
+    public void setMotorBDirectionForward() {motorBDirection = 1;}
+    @Override
+    public void setMotorBDirectionBackward() {motorBDirection = -1;}
 
     @Override
     public void emergencyStop() {
@@ -58,5 +81,15 @@ public class VirtualRobotController implements IRobotController {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    @Override
+    public void leftWheelForward() {
+        System.out.println("Left wheel forward");
+    }
+
+    @Override
+    public void rightWheelForward() {
+        System.out.println("Right wheel forward");
     }
 }
