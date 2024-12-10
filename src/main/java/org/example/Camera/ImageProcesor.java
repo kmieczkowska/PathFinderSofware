@@ -176,11 +176,11 @@ public class ImageProcesor {
         int blackPixelsA = Core.countNonZero(sectionA);
         int blackPixelsB = Core.countNonZero(sectionB);
 
-        if (blackPixelsA < blackPixelsB) {
+        if (blackPixelsA > blackPixelsB) {
             robotController.leftWheelForward();
             comparisonResult = "Lewo";
         }
-        else if (blackPixelsB < blackPixelsA) {
+        else if (blackPixelsB > blackPixelsA) {
             robotController.rightWheelForward();
             comparisonResult = "Prawo";
         }

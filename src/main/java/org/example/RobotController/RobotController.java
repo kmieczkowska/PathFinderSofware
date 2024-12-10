@@ -28,7 +28,7 @@ public class RobotController implements IRobotController {
     @Override
     public void setMotorADirectionBackward() {motorADirection = 1;}
     @Override
-    public void setMotorBDirectionForward() {motorBDirection = 1;}
+    public void setMotorBDirectionForward() {motorBDirection = 0;}
     @Override
     public void setMotorBDirectionBackward() {motorBDirection = 1;}
 
