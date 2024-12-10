@@ -132,7 +132,7 @@ public class RobotController implements IRobotController {
     //prawe koło jedzie do przodu 100%
     @Override
     public void rightWheelForward() {
-        setMovmentSpeed(0,motorADirection * 100);
+        setMovmentSpeed(0,motorBDirection * 100);
     }
 
     public void sendCommand(String command){
