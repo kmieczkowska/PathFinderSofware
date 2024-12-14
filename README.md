@@ -17,15 +17,20 @@ Na czystej maszynie mozna uruchomic obaraz dokera bez instalowania dependecji re
 docker build -t pathfinderclient:v1.0 .
 ```
 
-# TODO TPF:
-- obsługa wyjatków (kod wywala bład jezeli nie ma portu albo kamerki kod sie wywala, moze sprawdzic czy jest podpiety i zwórcic komunikak ze nie podłaczona wtedy kod nie bedzie sie wywalał tylko bedzia nas informował)
-- komenetrze do pliku konfiguracyjengo i wiecej parametrów
+# TODO
+- Sprawdzenie dla jakiego oświetelenia najlepiej działą kamerka (badanie)
+- Sprawdzenie dla jakiego tresholud binaryzacji najlepiej działą kamerka (badanie)
+  
+# TODO TESTER:
+- Obsługa wyjatków (kod wywala bład jezeli nie ma portu albo kamerki kod sie wywala, moze sprawdzic czy jest podpiety i zwórcic komunikak ze nie podłaczona wtedy kod nie bedzie sie wywalał tylko bedzia nas informował)
+- Komenetrze do pliku konfiguracyjengo i wiecej parametrów
 - Napisać Testy *lepiej napisac debug*
-- Badanie czasu wykonwania kodu
-# TODO PFS:
-- Obsluga predkosci na skretach
-- obsluga jazdy do przodu
-- obsluga zjechania ze sciezki
+- Zliczanie i wyświetlanie parametrów z jakimi wykonuje się (kod fps kamerki, czas wysyłania)
+- Możliwość sterowania robotem
+  
+
+# TODO SOFTWARE:
+- Napisanie różnych strategi
 
 
 # Godziny znarowane na konfiguracje javy
