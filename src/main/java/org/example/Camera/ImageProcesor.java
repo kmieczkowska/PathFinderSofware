@@ -16,6 +16,10 @@ public class ImageProcesor {
 
     private boolean isRunning = true;
 
+    private int treshold = 50;
+
+    public void setTreshold(int treshold) {this.treshold = treshold;}
+
     public void setStart(){
         isRunning = true;
     }
@@ -52,7 +56,7 @@ public class ImageProcesor {
         Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY);
 
         Mat binaryFrame = new Mat();
-        Imgproc.threshold(grayFrame, binaryFrame, 50, 255, Imgproc.THRESH_BINARY_INV); // prog
+        Imgproc.threshold(grayFrame, binaryFrame, treshold, 255, Imgproc.THRESH_BINARY_INV); // prog
 
         // Konwersja binaryzowanego obrazu z powrotem na format BGR, aby móc na nim rysować linie i etykiety
         Mat outputFrame = new Mat();
@@ -162,7 +166,7 @@ public class ImageProcesor {
         Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY);
 
         Mat binaryFrame = new Mat();
-        Imgproc.threshold(grayFrame, binaryFrame, 50, 255, Imgproc.THRESH_BINARY_INV); // prog
+        Imgproc.threshold(grayFrame, binaryFrame, treshold, 255, Imgproc.THRESH_BINARY_INV); // prog
 
         // Konwersja binaryzowanego obrazu z powrotem na format BGR, aby móc na nim rysować linie i etykiety
         Mat outputFrame = new Mat();
@@ -204,7 +208,7 @@ public class ImageProcesor {
 
         // Binaryzacja obrazu: szukamy czarnych obiektów (jasne tło -> ciemne obiekty)
         Mat binaryFrame = new Mat();
-        Imgproc.threshold(grayFrame, binaryFrame, 50, 255, Imgproc.THRESH_BINARY_INV);
+        Imgproc.threshold(grayFrame, binaryFrame, treshold, 255, Imgproc.THRESH_BINARY_INV);
 
         // Znajdowanie konturów czarnych obiektów
         List<MatOfPoint> contours = new ArrayList<>();

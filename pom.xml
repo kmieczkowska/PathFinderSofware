@@ -12,7 +12,7 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>    
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
   <build>
@@ -41,6 +41,11 @@
             <version>4.10.0-1.5.11</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>4.29.1</version>
+        </dependency>
 
     </dependencies>
 

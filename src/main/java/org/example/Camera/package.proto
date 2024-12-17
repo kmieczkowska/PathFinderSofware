@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option java_outer_classname = "ClientPackageClass";
+
+message ClientPackage {
+  string strategy = 1;
+  int32 motorASpeed = 2;
+  int32 motorBSpeed = 3;
+  int32 treshold = 4;
+  int32 binarisation = 5;
+  int32 cameraStream = 6;
+}
+

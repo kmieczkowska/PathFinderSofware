@@ -7,6 +7,7 @@ import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
@@ -37,14 +38,19 @@ public class CameraDetector {
         ImageProcesor imageProcesor = new ImageProcesor(robotController);
         Thread responseHandler = new Thread(() -> {
             while (true) {
-                String clientResponse = readClientResponse(inputStream);
-                if (clientResponse != null) {
-                    if (clientResponse.equals("manual")) imageProcesor.setStop();
-                    else if (clientResponse.equals("server")) imageProcesor.setStart();
-                    else {
-                        invokeSetMovementSpeed(clientResponse);
-                    }
+
+
+                try {
+                    ClientPackageClass.ClientPackage clientPackage = receiveClientPackage();
+                    imageProcesor.setTreshold(clientPackage.getTreshold());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
+//                String clientResponse = readClientResponse(inputStream);
+//                if (clientResponse != null) {
+//                    if (clientResponse.equals("manual")) imageProcesor.setStop();
+//                    else if (clientResponse.equals("server")) imageProcesor.setStart();
+//                }
             }
         });
         Thread clientHandler = new Thread(() -> {
@@ -125,6 +131,27 @@ public class CameraDetector {
             return null;
         }
     }
+
+    public ClientPackageClass.ClientPackage receiveClientPackage() throws IOException {
+        byte[] sizeBuffer = new byte[4];
+        if (inputStream.read(sizeBuffer) != 4) {
+            throw new IOException("Failed to read message size.");
+        }
+        int messageSize = ByteBuffer.wrap(sizeBuffer).getInt();
+
+        // Read the actual message
+        byte[] messageBuffer = new byte[messageSize];
+        int bytesRead = 0;
+        while (bytesRead < messageSize) {
+            int result = inputStream.read(messageBuffer, bytesRead, messageSize - bytesRead);
+            if (result == -1) {
+                throw new IOException("Stream closed before reading the full message.");
+            }
+            bytesRead += result;
+        }
+        return ClientPackageClass.ClientPackage.parseFrom(messageBuffer);
+    }
+
     private void invokeSetMovementSpeed(String response) {
         try {
             // Split the response by commas (expected format: "motorA,motorB,delay")
