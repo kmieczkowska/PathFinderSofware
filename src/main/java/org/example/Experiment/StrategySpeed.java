@@ -17,12 +17,16 @@ import java.nio.ByteBuffer;
 
 public class StrategySpeed {
     public static void main(String[] args) {
+
         long startTime;
+        long startTimeSecond;
         long endTime;
         int frameCount;
+        double elapsedTimeSeconds;
+        double fps;
         IRobotController robotController = new VirtualRobotController();
         ImageProcesor imageProcesor = new ImageProcesor(robotController);
-
+        String fileName = "results.csv";
 
         Loader.load(opencv_java.class);
 
@@ -33,38 +37,31 @@ public class StrategySpeed {
             return;
         }
 
-        startTime = System.nanoTime();
-        frameCount = 0;
-        Mat frame = new Mat();
-
-        long duration = 5_000_000_000L; // 5 sekund w nanosekundach
-        while (System.nanoTime() - startTime < duration) {
-            if (camera.read(frame)) {
-                frameCount++;
-                frame = imageProcesor.strategy2(frame);
-            } else {
-                System.out.println("Error: Could not read a frame.");
-            }
-        }
-
-        endTime = System.nanoTime();
-        double elapsedTimeSeconds = (endTime - startTime) / 1_000_000_000.0;
-        double fps = frameCount / elapsedTimeSeconds;
-
-        System.out.println("Frames analyzed: " + frameCount);
-        System.out.println("Elapsed time: " + elapsedTimeSeconds + " seconds");
-        System.out.println("Frames per second (FPS): " + fps);
-
-        String fileName = "results.csv";
         try (FileWriter writer = new FileWriter(fileName)) {
-            writer.append("Frames Analyzed,Elapsed Time (s),FPS\n"); // Nagłówki
-            writer.append(frameCount + "," + elapsedTimeSeconds + "," + fps + "\n"); // Dane
-            System.out.println("Results saved to " + fileName);
-        } catch (IOException e) {
+            writer.append("Frames Analyzed,Elapsed Time (s),FPS\n");
+            startTime = System.nanoTime();
+            // 300 sekund = 5 min
+            while (System.nanoTime() - startTime < 300_000_000_000L) {
+                frameCount = 0;
+                Mat frame = new Mat();
+                startTimeSecond = System.nanoTime();
+                // 5 sekund
+                while (System.nanoTime() - startTimeSecond < 5_000_000_000L) {
+                    if (camera.read(frame)) {
+                        frameCount++;
+                        frame = imageProcesor.strategy2(frame);
+                    } else {
+                        System.out.println("Error: Could not read a frame.");
+                    }
+                }
+                endTime = System.nanoTime();
+                elapsedTimeSeconds = (endTime - startTimeSecond) / 1_000_000_000.0;
+                fps = frameCount / elapsedTimeSeconds;
+                writer.append(frameCount + "," + ((endTime-startTime)/ 1_000_000_000.0) + "," + fps + "\n"); // Dane
+            }
+        } catch(IOException e){
             System.err.println("Error saving to CSV: " + e.getMessage());
         }
-
-
     }
 }
 
