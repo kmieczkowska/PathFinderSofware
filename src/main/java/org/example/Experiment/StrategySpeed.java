@@ -26,7 +26,7 @@ public class StrategySpeed {
         double fps;
         IRobotController robotController = new VirtualRobotController();
         ImageProcesor imageProcesor = new ImageProcesor(robotController);
-        String fileName = "results.csv";
+        String fileName = "desktop_strategy_1.csv";
 
         Loader.load(opencv_java.class);
 
