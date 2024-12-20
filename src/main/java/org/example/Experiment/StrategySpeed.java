@@ -38,6 +38,7 @@ public class StrategySpeed {
 
 
         TestBuilder testBuilder = new TestBuilder(implementation, "Desktop_");
+        //TestBuilder testBuilder = new TestBuilder(implementation, "RaspberryPi");
 
         Loader.load(opencv_java.class);
 
