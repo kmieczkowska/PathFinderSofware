@@ -191,8 +191,6 @@ public class RobotController implements IRobotController {
         emergencyStop();
         delay(3000);
 
-
-
         for(int i =0;i<3;i++){
             System.out.println("[DEBUG] send get sensor values.");
             System.out.println("[DEBUG] sensor values: "+getSensorValues());

@@ -11,12 +11,19 @@ import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class StrategySpeed {
     public static void main(String[] args) {
+        TestCameraSpeed(0);
+        TestCameraSpeed(1);
+        TestCameraSpeed(2);
+    }
+    
+    public static void TestCameraSpeed(int implementation) {
 
         long startTime;
         long startTimeSecond;
@@ -24,9 +31,8 @@ public class StrategySpeed {
         int frameCount;
         double elapsedTimeSeconds;
         double fps;
-        IRobotController robotController = new VirtualRobotController();
-        ImageProcesor imageProcesor = new ImageProcesor(robotController);
-        String fileName = "desktop_strategy_1.csv";
+
+        TestBuilder testBuilder = new TestBuilder(implementation, "Desktop_");
 
         Loader.load(opencv_java.class);
 
@@ -37,7 +43,7 @@ public class StrategySpeed {
             return;
         }
 
-        try (FileWriter writer = new FileWriter(fileName)) {
+        try (FileWriter writer = new FileWriter("data" + File.separator +"python" + File.separator + testBuilder.fileName)) {
             writer.append("Frames Analyzed,Elapsed Time (s),FPS\n");
             startTime = System.nanoTime();
             // 300 sekund = 5 min
@@ -48,8 +54,10 @@ public class StrategySpeed {
                 // 5 sekund
                 while (System.nanoTime() - startTimeSecond < 5_000_000_000L) {
                     if (camera.read(frame)) {
+
+                        testBuilder.processor.processFrame(frame);
                         frameCount++;
-                        frame = imageProcesor.strategy2(frame);
+
                     } else {
                         System.out.println("Error: Could not read a frame.");
                     }
