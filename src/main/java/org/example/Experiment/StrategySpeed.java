@@ -18,12 +18,16 @@ import java.nio.ByteBuffer;
 
 public class StrategySpeed {
     public static void main(String[] args) {
+
         TestCameraSpeed(0);
         TestCameraSpeed(1);
         TestCameraSpeed(2);
     }
-    
+
     public static void TestCameraSpeed(int implementation) {
+
+        final long TEST_DURATION_NS = 300_000_000_000L; // 5 minutes
+        final long SAMPLE_DURATION_NS = 5_000_000_000L; // 5 seconds
 
         long startTime;
         long startTimeSecond;
@@ -32,9 +36,12 @@ public class StrategySpeed {
         double elapsedTimeSeconds;
         double fps;
 
+
         TestBuilder testBuilder = new TestBuilder(implementation, "Desktop_");
 
         Loader.load(opencv_java.class);
+
+        Mat frame = new Mat();
 
         VideoCapture camera = new VideoCapture(0);
 
@@ -43,21 +50,20 @@ public class StrategySpeed {
             return;
         }
 
-        try (FileWriter writer = new FileWriter("data" + File.separator +"python" + File.separator + testBuilder.fileName)) {
+        System.out.println("Processing "+"["+implementation+"]"+" started at: " + new java.util.Date());
+
+        try (FileWriter writer = new FileWriter("python" + File.separator + "data" + File.separator + testBuilder.fileName)) {
             writer.append("Frames Analyzed,Elapsed Time (s),FPS\n");
             startTime = System.nanoTime();
             // 300 sekund = 5 min
-            while (System.nanoTime() - startTime < 300_000_000_000L) {
+            while (System.nanoTime() - startTime < TEST_DURATION_NS) {
                 frameCount = 0;
-                Mat frame = new Mat();
                 startTimeSecond = System.nanoTime();
                 // 5 sekund
-                while (System.nanoTime() - startTimeSecond < 5_000_000_000L) {
-                    if (camera.read(frame)) {
-
+                while (System.nanoTime() - startTimeSecond < SAMPLE_DURATION_NS) {
+                    if (camera.read(frame) && !frame.empty()) {
                         testBuilder.processor.processFrame(frame);
                         frameCount++;
-
                     } else {
                         System.out.println("Error: Could not read a frame.");
                     }
@@ -69,6 +75,9 @@ public class StrategySpeed {
             }
         } catch(IOException e){
             System.err.println("Error saving to CSV: " + e.getMessage());
+        }finally {
+            camera.release();
+            System.out.println("Processing "+"["+implementation+"]"+" ended at: " + new java.util.Date());
         }
     }
 }
