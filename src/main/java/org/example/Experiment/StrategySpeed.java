@@ -1,5 +1,6 @@
 package org.example.Experiment;
 
+import com.sun.management.OperatingSystemMXBean;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.opencv.opencv_java;
 import org.example.Camera.ImageProcesor;
@@ -14,6 +15,7 @@ import org.opencv.videoio.VideoCapture;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.nio.ByteBuffer;
 
 public class StrategySpeed {
@@ -37,8 +39,12 @@ public class StrategySpeed {
         double fps;
 
 
+
+
         TestBuilder testBuilder = new TestBuilder(implementation, "Desktop_");
         //TestBuilder testBuilder = new TestBuilder(implementation, "RaspberryPi");
+
+        Usage usage = new Usage();
 
         Loader.load(opencv_java.class);
 
@@ -54,7 +60,7 @@ public class StrategySpeed {
         System.out.println("Processing "+"["+implementation+"]"+" started at: " + new java.util.Date());
 
         try (FileWriter writer = new FileWriter("python" + File.separator + "data" + File.separator + testBuilder.fileName)) {
-            writer.append("Frames Analyzed,Elapsed Time (s),FPS\n");
+            writer.append("Frames Analyzed,Elapsed Time (s),FPS,CPU Load, Memory usage Percentage\n");
             startTime = System.nanoTime();
             // 300 sekund = 5 min
             while (System.nanoTime() - startTime < TEST_DURATION_NS) {
@@ -64,15 +70,20 @@ public class StrategySpeed {
                 while (System.nanoTime() - startTimeSecond < SAMPLE_DURATION_NS) {
                     if (camera.read(frame) && !frame.empty()) {
                         testBuilder.processor.processFrame(frame);
+
                         frameCount++;
                     } else {
                         System.out.println("Error: Could not read a frame.");
                     }
                 }
+                usage.getUsage();
                 endTime = System.nanoTime();
                 elapsedTimeSeconds = (endTime - startTimeSecond) / 1_000_000_000.0;
                 fps = frameCount / elapsedTimeSeconds;
-                writer.append(frameCount + "," + ((endTime-startTime)/ 1_000_000_000.0) + "," + fps + "\n"); // Dane
+                writer.append(frameCount + "," + ((endTime-startTime)/ 1_000_000_000.0) + "," + fps + ","); // Dane
+                writer.append(usage.cpuLoad + "%"+ ",");
+                writer.append(usage.usedMemoryPercentage + "%");
+                writer.append("\n");
             }
         } catch(IOException e){
             System.err.println("Error saving to CSV: " + e.getMessage());
