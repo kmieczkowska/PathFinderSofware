@@ -81,8 +81,8 @@ public class StrategySpeed {
                 elapsedTimeSeconds = (endTime - startTimeSecond) / 1_000_000_000.0;
                 fps = frameCount / elapsedTimeSeconds;
                 writer.append(frameCount + "," + ((endTime-startTime)/ 1_000_000_000.0) + "," + fps + ","); // Dane
-                writer.append(usage.cpuLoad + "%"+ ",");
-                writer.append(usage.usedMemoryPercentage + "%");
+                writer.append(usage.cpuLoad + ",");
+                writer.append(usage.usedMemoryPercentage + "");
                 writer.append("\n");
             }
         } catch(IOException e){
