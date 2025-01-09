@@ -35,8 +35,9 @@ public interface IRobotController {
     public void delay(int delayInt);
 
     public void leftWheelForward();
+
     public void rightWheelForward();
 
-
+    public void setFlashlightBrightness(int brightness);
 
 }

@@ -92,4 +92,9 @@ public class VirtualRobotController implements IRobotController {
     public void rightWheelForward() {
         System.out.println("Right wheel forward");
     }
+
+    @Override
+    public void setFlashlightBrightness(int brightness) {
+        System.out.println("Setting flashlight brightness");
+    }
 }

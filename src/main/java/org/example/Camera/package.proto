@@ -9,5 +9,6 @@ message ClientPackage {
   int32 treshold = 4;
   int32 binarisation = 5;
   int32 cameraStream = 6;
+  int32 flashlightBrightness = 7;
 }
 

@@ -43,6 +43,7 @@ public class CameraDetector {
                 try {
                     ClientPackageClass.ClientPackage clientPackage = receiveClientPackage();
                     imageProcesor.setTreshold(clientPackage.getTreshold());
+                    robotController.setFlashlightBrightness(clientPackage.getFlashlightBrightness());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

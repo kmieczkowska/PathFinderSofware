@@ -135,6 +135,12 @@ public class RobotController implements IRobotController {
         setMovmentSpeed(0,(motorBDirection*100) + 100);
     }
 
+    @Override
+    public void setFlashlightBrightness(int brightness) {
+        String message = "8 " + Integer.toString(brightness) +"\n";
+        serialPort.writeBytes(message.getBytes(), message.length());
+    }
+
     public void sendCommand(String command){
         serialPort.writeBytes((command + "\n").getBytes(), 2);
     }

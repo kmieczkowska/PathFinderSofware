@@ -68,6 +68,12 @@ public final class ClientPackageClass {
      * @return The cameraStream.
      */
     int getCameraStream();
+
+    /**
+     * <code>int32 flashlightBrightness = 7;</code>
+     * @return The flashlightBrightness.
+     */
+    int getFlashlightBrightness();
   }
   /**
    * Protobuf type {@code ClientPackage}
@@ -201,6 +207,17 @@ public final class ClientPackageClass {
       return cameraStream_;
     }
 
+    public static final int FLASHLIGHTBRIGHTNESS_FIELD_NUMBER = 7;
+    private int flashlightBrightness_ = 0;
+    /**
+     * <code>int32 flashlightBrightness = 7;</code>
+     * @return The flashlightBrightness.
+     */
+    @Override
+    public int getFlashlightBrightness() {
+      return flashlightBrightness_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @Override
     public final boolean isInitialized() {
@@ -232,6 +249,9 @@ public final class ClientPackageClass {
       }
       if (cameraStream_ != 0) {
         output.writeInt32(6, cameraStream_);
+      }
+      if (flashlightBrightness_ != 0) {
+        output.writeInt32(7, flashlightBrightness_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -265,6 +285,10 @@ public final class ClientPackageClass {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(6, cameraStream_);
       }
+      if (flashlightBrightness_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, flashlightBrightness_);
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -292,6 +316,8 @@ public final class ClientPackageClass {
           != other.getBinarisation()) return false;
       if (getCameraStream()
           != other.getCameraStream()) return false;
+      if (getFlashlightBrightness()
+          != other.getFlashlightBrightness()) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -315,6 +341,8 @@ public final class ClientPackageClass {
       hash = (53 * hash) + getBinarisation();
       hash = (37 * hash) + CAMERASTREAM_FIELD_NUMBER;
       hash = (53 * hash) + getCameraStream();
+      hash = (37 * hash) + FLASHLIGHTBRIGHTNESS_FIELD_NUMBER;
+      hash = (53 * hash) + getFlashlightBrightness();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -452,6 +480,7 @@ public final class ClientPackageClass {
         treshold_ = 0;
         binarisation_ = 0;
         cameraStream_ = 0;
+        flashlightBrightness_ = 0;
         return this;
       }
 
@@ -503,6 +532,9 @@ public final class ClientPackageClass {
         if (((from_bitField0_ & 0x00000020) != 0)) {
           result.cameraStream_ = cameraStream_;
         }
+        if (((from_bitField0_ & 0x00000040) != 0)) {
+          result.flashlightBrightness_ = flashlightBrightness_;
+        }
       }
 
       @Override
@@ -536,6 +568,9 @@ public final class ClientPackageClass {
         }
         if (other.getCameraStream() != 0) {
           setCameraStream(other.getCameraStream());
+        }
+        if (other.getFlashlightBrightness() != 0) {
+          setFlashlightBrightness(other.getFlashlightBrightness());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
@@ -593,6 +628,11 @@ public final class ClientPackageClass {
                 bitField0_ |= 0x00000020;
                 break;
               } // case 48
+              case 56: {
+                flashlightBrightness_ = input.readInt32();
+                bitField0_ |= 0x00000040;
+                break;
+              } // case 56
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -842,6 +882,38 @@ public final class ClientPackageClass {
         return this;
       }
 
+      private int flashlightBrightness_ ;
+      /**
+       * <code>int32 flashlightBrightness = 7;</code>
+       * @return The flashlightBrightness.
+       */
+      @Override
+      public int getFlashlightBrightness() {
+        return flashlightBrightness_;
+      }
+      /**
+       * <code>int32 flashlightBrightness = 7;</code>
+       * @param value The flashlightBrightness to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFlashlightBrightness(int value) {
+
+        flashlightBrightness_ = value;
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 flashlightBrightness = 7;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearFlashlightBrightness() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        flashlightBrightness_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:ClientPackage)
     }
 
@@ -907,11 +979,12 @@ public final class ClientPackageClass {
       descriptor;
   static {
     String[] descriptorData = {
-      "\n\rpackage.proto\"\211\001\n\rClientPackage\022\020\n\010str" +
+      "\n\rpackage.proto\"\247\001\n\rClientPackage\022\020\n\010str" +
       "ategy\030\001 \001(\t\022\023\n\013motorASpeed\030\002 \001(\005\022\023\n\013moto" +
       "rBSpeed\030\003 \001(\005\022\020\n\010treshold\030\004 \001(\005\022\024\n\014binar" +
-      "isation\030\005 \001(\005\022\024\n\014cameraStream\030\006 \001(\005B\024B\022C" +
-      "lientPackageClassb\006proto3"
+      "isation\030\005 \001(\005\022\024\n\014cameraStream\030\006 \001(\005\022\034\n\024f" +
+      "lashlightBrightness\030\007 \001(\005B\024B\022ClientPacka" +
+      "geClassb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -922,7 +995,7 @@ public final class ClientPackageClass {
     internal_static_ClientPackage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_ClientPackage_descriptor,
-        new String[] { "Strategy", "MotorASpeed", "MotorBSpeed", "Treshold", "Binarisation", "CameraStream", });
+        new String[] { "Strategy", "MotorASpeed", "MotorBSpeed", "Treshold", "Binarisation", "CameraStream", "FlashlightBrightness", });
     descriptor.resolveAllFeaturesImmutable();
   }
 

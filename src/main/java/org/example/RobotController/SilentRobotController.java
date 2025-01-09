@@ -90,4 +90,9 @@ public class SilentRobotController implements IRobotController{
     public void rightWheelForward() {
 
     }
+
+    @Override
+    public void setFlashlightBrightness(int brightness) {
+
+    }
 }
