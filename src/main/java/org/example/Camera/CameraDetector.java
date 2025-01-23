@@ -38,8 +38,6 @@ public class CameraDetector {
         ImageProcesor imageProcesor = new ImageProcesor(robotController);
         Thread responseHandler = new Thread(() -> {
             while (true) {
-
-
                 try {
                     ClientPackageClass.ClientPackage clientPackage = receiveClientPackage();
                     imageProcesor.setTreshold(clientPackage.getTreshold());
