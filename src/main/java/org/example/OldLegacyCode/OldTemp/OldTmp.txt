@@ -17,3 +17,17 @@ while (true) {
 //
 //            }
 //        }
+
+
+//Old test for serial port:
+
+SerialPort serialPort;
+serialPort = SerialPort.getCommPort("COM3");
+serialPort.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
+serialPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
+serialPort.openPort();
+serialPort.writeBytes("1\n".getBytes(), 2);
+delay(1000);
+serialPort.writeBytes("0\n".getBytes(), 2);
+delay(1000);
+serialPort.closePort();

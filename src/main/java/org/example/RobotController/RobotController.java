@@ -67,7 +67,7 @@ public class RobotController implements IRobotController {
 //        serialPort.writeBytes("4\n".getBytes(), 2);
 //    }
 
-        @Override
+    @Override
     public void emergencyStop() {
         setMovmentSpeed(0,0);
     }

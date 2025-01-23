@@ -1,4 +1,4 @@
-package org.example.Experiment;
+package org.example.OldLegacyCode.OldTestsToRefactor;
 
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;

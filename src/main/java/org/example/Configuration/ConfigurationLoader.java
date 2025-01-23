@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * Wczytanie pliku konfiguracyjnego
+ * Wczytanie pliku konfiguracyjnego oraz dostep do wartości z pliku
  */
 public class ConfigurationLoader {
 
@@ -21,27 +21,12 @@ public class ConfigurationLoader {
     }
 
     // Getter methods to retrieve configuration values
-    public String getSerialMode() {
-        return properties.getProperty("SERIAL_LOCAL_MODE");
-    }
+    public String getSerialMode() { return properties.getProperty("SERIAL_LOCAL_MODE"); }
 
-    public String getRobotMode() {
-        return properties.getProperty("ROBOT_MODE");
-    }
+    public String getRobotMode() { return properties.getProperty("ROBOT_MODE"); }
 
-    public String getMotorADirection() {
-        return properties.getProperty("MOTOR_A_DIRECTION");
-    }
+    public String getMotorADirection() { return properties.getProperty("MOTOR_A_DIRECTION"); }
 
-    public String getMotorBDirection() {
-        return properties.getProperty("MOTOR_B_DIRECTION");
-    }
+    public String getMotorBDirection() { return properties.getProperty("MOTOR_B_DIRECTION"); }
 
-
-    // Main method for testing
-    public static void main(String[] args) {
-        ConfigurationLoader config = new ConfigurationLoader("configuration.properties");
-        System.out.println("Database URL: " + config.getSerialMode());
-
-    }
 }

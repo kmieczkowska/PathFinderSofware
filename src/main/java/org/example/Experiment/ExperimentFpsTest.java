@@ -1,32 +1,24 @@
 package org.example.Experiment;
 
-import com.sun.management.OperatingSystemMXBean;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.opencv.opencv_java;
-import org.example.Camera.ImageProcesor;
-import org.example.RobotController.IRobotController;
-import org.example.RobotController.RobotController;
-import org.example.RobotController.VirtualRobotController;
+import org.example.OldLegacyCode.OldTestsToRefactor.Usage;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.nio.ByteBuffer;
 
-public class StrategySpeed {
+public class ExperimentFpsTest {
     public static void main(String[] args) {
 
-        TestCameraSpeed(0);
-        TestCameraSpeed(1);
-        TestCameraSpeed(2);
+        FpsTest(0);
+        FpsTest(1);
+        FpsTest(2);
     }
 
-    public static void TestCameraSpeed(int implementation) {
+    public static void FpsTest(int implementation) {
 
         final long TEST_DURATION_NS = 300_000_000_000L; // 5 minutes
         final long SAMPLE_DURATION_NS = 5_000_000_000L; // 5 seconds

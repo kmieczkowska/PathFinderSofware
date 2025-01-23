@@ -1,7 +1,8 @@
 package org.example.RobotController;
 
 /**
- * Interfejs do obsługi wykrycia portu szeregowego
+ * Interfejs do wyboruy czy jesteśmy w stanie sterować robotem,
+ * czy wolimy tylko wypisywac co by sie dzialo z robotem do konsli.
  */
 public interface IRobotController {
 
