@@ -1,6 +1,8 @@
 package org.example;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fazecast.jSerialComm.SerialPort;
+import com.google.protobuf.InvalidProtocolBufferException;
 import org.example.Camera.CameraDetector;
 import org.example.Configuration.ConfigurationLoader;
 import org.example.RobotController.IRobotController;
@@ -8,6 +10,7 @@ import org.example.RobotController.RobotController;
 import org.example.RobotController.VirtualRobotController;
 import org.example.ServerCommunication.ServerCommunication;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
@@ -46,22 +49,28 @@ public class Main {
         robotController.setMotorBDirection(MOTOR_B_DIRECTION);
 
         // Otworzenie soketu czekanie na połączenie z clientem
-        System.out.println("Waiting for client connection...");
-        int serverPort = 1234;
-        try (ServerSocket serverSocket = new ServerSocket(serverPort)) {
-                Socket socket = serverSocket.accept();
-                outputStream = socket.getOutputStream();
-                inputStream = socket.getInputStream();
-        } catch (Exception e) {
-                e.printStackTrace();
+//        System.out.println("Waiting for client connection...");
+//        int serverPort = 1234;
+//        try (ServerSocket serverSocket = new ServerSocket(serverPort)) {
+//                Socket socket = serverSocket.accept();
+//                outputStream = socket.getOutputStream();
+//                inputStream = socket.getInputStream();
+//        } catch (Exception e) {
+//                e.printStackTrace();
+//        }
+
+        //ServerCommunication serverCommunication = new ServerCommunication(robotController,inputStream,outputStream);
+
+        //CameraDetector detector = new CameraDetector(robotController,inputStream,outputStream);
+
+        //if(ROBOT_MODE == 0){ detector.start(); }
+        if(ROBOT_MODE == 1){
+            try {
+                robotController.readRobotData();
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
         }
-
-        ServerCommunication serverCommunication = new ServerCommunication(robotController,inputStream,outputStream);
-
-        CameraDetector detector = new CameraDetector(robotController,inputStream,outputStream);
-
-        if(ROBOT_MODE == 0){ detector.start(); }
-        else if(ROBOT_MODE == 1){ robotController.strategy_1(); }
 
     }
 }

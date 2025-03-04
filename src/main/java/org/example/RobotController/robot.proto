@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+message RobotData {
+    int32 sensor_value_1 = 1;
+    int32 sensor_value_2 = 2;
+    int32 sensor_value_3 = 3;
+    int32 sensor_value_4 = 4;
+    int32 sensor_value_5 = 5;
+    int32 raw_angle_1 = 6;
+    int32 raw_angle_2 = 7;
+    float x_pos = 8;
+    float y_pos = 9;
+    float theta = 10;
+}

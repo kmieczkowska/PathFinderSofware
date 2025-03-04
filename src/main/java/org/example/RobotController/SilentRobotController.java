@@ -62,12 +62,12 @@ public class SilentRobotController implements IRobotController{
     }
 
     @Override
-    public void strategy_1() {
+    public void readRobotData() {
 
     }
 
     @Override
-    public String getSensorValues() {
+    public String getRobotData() {
         return "";
     }
 

@@ -1,5 +1,10 @@
 package org.example.RobotController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.protobuf.InvalidProtocolBufferException;
+
+import java.io.IOException;
+
 /**
  * Interfejs do wyboruy czy jesteśmy w stanie sterować robotem,
  * czy wolimy tylko wypisywac co by sie dzialo z robotem do konsli.
@@ -27,9 +32,7 @@ public interface IRobotController {
 
     public void turnRight();
 
-    public void strategy_1();
-
-    public String getSensorValues();
+    public String getRobotData();
 
     public void sendCommand(String command);
 
@@ -41,4 +44,5 @@ public interface IRobotController {
 
     public void setFlashlightBrightness(int brightness);
 
+    public void readRobotData() throws JsonProcessingException;
 }

@@ -60,12 +60,12 @@ public class VirtualRobotController implements IRobotController {
     }
 
     @Override
-    public void strategy_1() {
+    public void readRobotData() {
         System.out.println("Strategy 1");
     }
 
     @Override
-    public String getSensorValues() {
+    public String getRobotData() {
         return "10101";
     }
 
