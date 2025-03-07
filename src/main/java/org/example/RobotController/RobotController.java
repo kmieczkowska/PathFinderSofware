@@ -22,6 +22,8 @@ public class RobotController implements IRobotController {
     
     SerialPort serialPort;
 
+    RobotDataJson deserializedRobotData;
+
     private int motorADirection = 1;
     private int motorBDirection = 1;
 
@@ -51,6 +53,28 @@ public class RobotController implements IRobotController {
      */
     public RobotController(SerialPort serialPortInit){
         serialPort = serialPortInit;
+
+    }
+
+    public void strategy_1() throws JsonProcessingException {
+        readRobotData();
+//
+//        switch (sensorValues) {
+//            case "01111":
+//                turnLeft();
+//                delay(300);
+//                emergencyStop();
+//                break;
+//            case "01111":
+//                turnLeft();
+//                delay(300);
+//                emergencyStop();
+//                break;
+//
+//                default:
+//                    emergencyStop();
+//                    break;
+//            }
 
     }
 
@@ -166,15 +190,32 @@ public class RobotController implements IRobotController {
         ObjectMapper mapper = new ObjectMapper();
         String command = "7\n";
         serialPort.writeBytes(command.getBytes(), command.length());
-        delay(500);
+        delay(1);
         byte[] buffer = new byte[1024];
         int numRead = serialPort.readBytes(buffer, buffer.length);
         if (numRead > 0) {
             String receivedData = new String(buffer, 0, numRead);
-            System.out.println("Received: " + receivedData);
-            RobotDataJson deserializedRobotData = mapper.readValue(receivedData,RobotDataJson.class);
+            deserializedRobotData = mapper.readValue(receivedData,RobotDataJson.class);
         }
 
+    }
+
+    public void showRobotData() throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        byte[] buffer = new byte[1024];
+        String command = "7\n";
+        String receivedData;
+        while(true){
+            serialPort.writeBytes(command.getBytes(), command.length());
+            delay(50);
+            int numRead = serialPort.readBytes(buffer, buffer.length);
+            if (numRead > 0) {
+                receivedData = new String(buffer, 0, numRead);
+                System.out.println(receivedData);
+                deserializedRobotData = mapper.readValue(receivedData,RobotDataJson.class);
+            }
+            delay(500);
+        }
     }
     static class RobotDataJson{
         @JsonCreator
@@ -183,11 +224,24 @@ public class RobotController implements IRobotController {
                              @JsonProperty("sensorValue3") int sensorValue3,
                              @JsonProperty("sensorValue4") int sensorValue4,
                              @JsonProperty("sensorValue5") int sensorValue5,
+
                              @JsonProperty("xPos") float xPos,
                              @JsonProperty("yPos") float yPos,
                              @JsonProperty("theta") float theta,
+
                              @JsonProperty("rawAngle1") int rawAngle1,
-                             @JsonProperty("rawAngle2") int rawAngle2) {
+                             @JsonProperty("rawAngle2") int rawAngle2,
+
+                             @JsonProperty("xGyro") float xGyro,
+                             @JsonProperty("yGyro") float yGyro,
+                             @JsonProperty("zGyro") float zGyro,
+
+                             @JsonProperty("xAccel") float xAccel,
+                             @JsonProperty("yAccel") float yAccel,
+                             @JsonProperty("zAccel") float zAccel,
+
+                             @JsonProperty("Temp") float Temp)
+        {
             this.sensorValue1 = sensorValue1;
             this.sensorValue2 = sensorValue2;
             this.sensorValue3 = sensorValue3;
@@ -198,6 +252,13 @@ public class RobotController implements IRobotController {
             this.theta = theta;
             this.rawAngle1 = rawAngle1;
             this.rawAngle2 = rawAngle2;
+            this.xGyro = xGyro;
+            this.yGyro = yGyro;
+            this.zGyro = zGyro;
+            this.xAccel = xAccel;
+            this.yAccel = yAccel;
+            this.zAccel = zAccel;
+            this.Temp = Temp;
         }
 
         private int sensorValue1;
@@ -212,6 +273,15 @@ public class RobotController implements IRobotController {
 
         private int rawAngle1;
         private int rawAngle2;
+
+        private float xGyro;
+        private float yGyro;
+        private float zGyro;
+
+        private float xAccel;
+        private float yAccel;
+        private float zAccel;
+        private float Temp;
 
 
         public int getSensorValue1() {
@@ -248,7 +318,30 @@ public class RobotController implements IRobotController {
         public int getRawAngle2() {
             return rawAngle2;
         }
+        public float getXGyro() {
+            return xGyro;
+        }
+        public float getYGyro() {
+            return yGyro;
+        }
+        public float getZGyro() {
+            return zGyro;
+        }
+        public float getXAccel() {
+            return xAccel;
+        }
+        public float getYAccel() {
+            return yAccel;
+        }
+        public float getZAccel() {
+            return zAccel;
+        }
+        public float getTemp() {
+            return Temp;
+        }
+
     }
+
 
 
             // Buffer for received data

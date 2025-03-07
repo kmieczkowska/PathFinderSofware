@@ -1,5 +1,7 @@
 package org.example.RobotController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 public class SilentRobotController implements IRobotController{
     @Override
     public void setMotorADirection(int direction) {
@@ -63,6 +65,16 @@ public class SilentRobotController implements IRobotController{
 
     @Override
     public void readRobotData() {
+
+    }
+
+    @Override
+    public void showRobotData() throws JsonProcessingException {
+
+    }
+
+    @Override
+    public void strategy_1() throws JsonProcessingException {
 
     }
 

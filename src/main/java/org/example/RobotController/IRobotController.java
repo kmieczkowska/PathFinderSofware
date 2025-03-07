@@ -45,4 +45,8 @@ public interface IRobotController {
     public void setFlashlightBrightness(int brightness);
 
     public void readRobotData() throws JsonProcessingException;
+
+    public void showRobotData() throws JsonProcessingException;
+
+    public void strategy_1() throws JsonProcessingException;
 }

@@ -1,4 +1,4 @@
-package org.example.ServerCommunication;
+package org.example.OldLegacyCode.ServerCommunication;
 
 import org.example.RobotController.IRobotController;
 

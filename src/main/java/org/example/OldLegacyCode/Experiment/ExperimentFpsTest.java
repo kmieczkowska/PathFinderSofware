@@ -1,4 +1,4 @@
-package org.example.Experiment;
+package org.example.OldLegacyCode.Experiment;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.opencv.opencv_java;

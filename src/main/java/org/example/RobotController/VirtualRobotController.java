@@ -1,5 +1,7 @@
 package org.example.RobotController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 /**
  * W przypadku gdy nie wykryto portu szeregowego - obsługa konsoli
  */
@@ -62,6 +64,16 @@ public class VirtualRobotController implements IRobotController {
     @Override
     public void readRobotData() {
         System.out.println("Strategy 1");
+    }
+
+    @Override
+    public void showRobotData() throws JsonProcessingException {
+
+    }
+
+    @Override
+    public void strategy_1() throws JsonProcessingException {
+
     }
 
     @Override

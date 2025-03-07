@@ -2,19 +2,13 @@ package org.example;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fazecast.jSerialComm.SerialPort;
-import com.google.protobuf.InvalidProtocolBufferException;
-import org.example.Camera.CameraDetector;
 import org.example.Configuration.ConfigurationLoader;
 import org.example.RobotController.IRobotController;
 import org.example.RobotController.RobotController;
 import org.example.RobotController.VirtualRobotController;
-import org.example.ServerCommunication.ServerCommunication;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 public class Main {
 
@@ -66,7 +60,7 @@ public class Main {
         //if(ROBOT_MODE == 0){ detector.start(); }
         if(ROBOT_MODE == 1){
             try {
-                robotController.readRobotData();
+                robotController.showRobotData();
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
