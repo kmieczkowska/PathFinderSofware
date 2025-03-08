@@ -49,4 +49,6 @@ public interface IRobotController {
     public void showRobotData() throws JsonProcessingException;
 
     public void strategy_1() throws JsonProcessingException;
+
+    public void saveDataRobot() throws JsonProcessingException;
 }

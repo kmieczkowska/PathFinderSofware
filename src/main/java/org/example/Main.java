@@ -60,7 +60,7 @@ public class Main {
         //if(ROBOT_MODE == 0){ detector.start(); }
         if(ROBOT_MODE == 1){
             try {
-                robotController.showRobotData();
+                robotController.saveDataRobot();
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }

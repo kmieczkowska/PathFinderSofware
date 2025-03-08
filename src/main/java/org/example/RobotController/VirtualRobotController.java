@@ -77,6 +77,11 @@ public class VirtualRobotController implements IRobotController {
     }
 
     @Override
+    public void saveDataRobot() throws JsonProcessingException {
+
+    }
+
+    @Override
     public String getRobotData() {
         return "10101";
     }

@@ -9,6 +9,8 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -217,6 +219,79 @@ public class RobotController implements IRobotController {
             delay(500);
         }
     }
+
+
+    public void saveDataRobot() throws JsonProcessingException {
+
+        long startTime;
+        final long TEST_DURATION_NS = 30_000_000_000L; // 30 seconds
+        ObjectMapper mapper = new ObjectMapper();
+        byte[] buffer = new byte[1024];
+        String command = "7\n";
+        String receivedData;
+        int numRead = 0;
+
+        System.out.println("Processing started at: " + new java.util.Date());
+        try (FileWriter writer = new FileWriter("python" + File.separator + "data" + File.separator+"RobotData2.csv" )) {
+            writer.append("nanoTime,sensorValue1,sensorValue2,sensorValue3,sensorValue4,sensorValue5,");
+            writer.append("xPos,yPos,theta,");
+            writer.append("rawAngle1,rawAngle2,");
+            writer.append("xGyro,yGyro,zGyro,");
+            writer.append("xAccel,yAccel,zAccel,");
+            writer.append("Temp");
+            writer.append("\n");
+            startTime = System.nanoTime();
+            while(System.nanoTime() - startTime < TEST_DURATION_NS){
+                serialPort.writeBytes(command.getBytes(), command.length());
+                delay(50);
+                numRead = serialPort.readBytes(buffer, buffer.length);
+                if (numRead > 0) {
+                    receivedData = new String(buffer, 0, numRead);
+                    try{
+                        deserializedRobotData = mapper.readValue(receivedData,RobotDataJson.class);
+
+                        writer.append(System.nanoTime() + ",");
+
+                        writer.append(deserializedRobotData.getSensorValue1() + ",");
+                        writer.append(deserializedRobotData.getSensorValue2() + ",");
+                        writer.append(deserializedRobotData.getSensorValue3() + ",");
+                        writer.append(deserializedRobotData.getSensorValue4() + ",");
+                        writer.append(deserializedRobotData.getSensorValue5() + ",");
+
+                        writer.append(deserializedRobotData.getXPos() + ",");
+                        writer.append(deserializedRobotData.getYPos() + ",");
+                        writer.append(deserializedRobotData.getTheta() + ",");
+
+                        writer.append(deserializedRobotData.getRawAngle1() + ",");
+                        writer.append(deserializedRobotData.getRawAngle2() + ",");
+
+                        writer.append(deserializedRobotData.getXGyro() + ",");
+                        writer.append(deserializedRobotData.getYGyro() + ",");
+                        writer.append(deserializedRobotData.getZGyro() + ",");
+
+                        writer.append(deserializedRobotData.getXAccel() + ",");
+                        writer.append(deserializedRobotData.getYAccel() + ",");
+                        writer.append(deserializedRobotData.getZAccel() + ",");
+
+                        writer.append(deserializedRobotData.getTemp() + "");
+                        writer.append("\n");
+                    }catch(IOException e){
+                        System.out.println("Curapt!");
+                    }
+
+                }
+
+            }
+        } catch(IOException e){
+            System.err.println("Error saving to CSV: " + e.getMessage());
+        }finally {
+            System.out.println("Processing ended at: " + new java.util.Date());
+        }
+    }
+
+
+
+
     static class RobotDataJson{
         @JsonCreator
         public RobotDataJson(@JsonProperty("sensorValue1") int sensorValue1,
