@@ -28,5 +28,8 @@ public class ConfigurationLoader {
     public String getMotorADirection() { return properties.getProperty("MOTOR_A_DIRECTION"); }
 
     public String getMotorBDirection() { return properties.getProperty("MOTOR_B_DIRECTION"); }
+    public String getMotorAPower() { return properties.getProperty("MOTOR_A_POWER"); }
+    public String getMotorBPower() { return properties.getProperty("MOTOR_B_POWER"); }
+
 
 }

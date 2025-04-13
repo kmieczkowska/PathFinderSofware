@@ -14,6 +14,16 @@ public class SilentRobotController implements IRobotController{
     }
 
     @Override
+    public void setMotorBPower(int power) {
+
+    }
+
+    @Override
+    public void setMotorAPower(int power) {
+
+    }
+
+    @Override
     public void setMotorADirectionForward() {
 
     }
@@ -40,6 +50,11 @@ public class SilentRobotController implements IRobotController{
 
     @Override
     public void setMovmentSpeed(int motorA, int motorB) {
+
+    }
+
+    @Override
+    public void setMovmentSpeed() {
 
     }
 

@@ -13,6 +13,8 @@ public interface IRobotController {
 
     public void setMotorADirection(int direction);
     public void setMotorBDirection(int direction);
+    public void setMotorBPower(int power);
+    public void setMotorAPower(int power);
 
     public void setMotorADirectionForward();
     public void setMotorADirectionBackward();
@@ -23,6 +25,7 @@ public interface IRobotController {
     public void emergencyStop();
 
     public void setMovmentSpeed(int motorA, int motorB);
+    public void setMovmentSpeed();
 
     public void moveForward();
 

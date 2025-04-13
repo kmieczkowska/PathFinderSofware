@@ -28,6 +28,15 @@ public class RobotController implements IRobotController {
 
     private int motorADirection = 1;
     private int motorBDirection = 1;
+    private int motorAPower = 100;
+    private int motorBPower = 100;
+
+    public void setMotorAPower(int power) {
+        motorAPower = power;
+    }
+    public void setMotorBPower(int power) {
+        motorBPower = power;
+    }
 
     @Override
     public void setMotorADirection(int direction) {
@@ -68,7 +77,10 @@ public class RobotController implements IRobotController {
     }
     @Override
     public void moveForward() {
-        setMovmentSpeed((motorADirection*100) + 100,(motorBDirection *100)+ 100);
+        setMovmentSpeed(
+                (((motorADirection*100) + 100)*motorAPower)/100,
+                ((motorBDirection *100)+ 100)*motorBPower/100
+        );
     }
     @Override
     public void moveReverse(){
@@ -91,6 +103,12 @@ public class RobotController implements IRobotController {
     @Override
     public void setMovmentSpeed(int motorA, int motorB){
         String message = "5 " + Integer.toString(motorA) + " " + Integer.toString(motorB) +"\n";
+        serialPort.writeBytes(message.getBytes(), message.length());
+    }
+
+    @Override
+    public void setMovmentSpeed(){
+        String message = "5 " + Integer.toString(motorAPower) + " " + Integer.toString(motorBPower) +"\n";
         serialPort.writeBytes(message.getBytes(), message.length());
     }
 
@@ -121,12 +139,12 @@ public class RobotController implements IRobotController {
     //lewe koło jedzie do przodu 100%
     @Override
     public void leftWheelForward() {
-        setMovmentSpeed((motorADirection*100) + 100,0);
+        setMovmentSpeed((((motorADirection*100) + 100) * motorAPower)/100,0);
     }
     //prawe koło jedzie do przodu 100%
     @Override
     public void rightWheelForward() {
-        setMovmentSpeed(0,(motorBDirection*100) + 100);
+        setMovmentSpeed(0,(((motorBDirection*100) + 100) * motorBPower)/100);
     }
 
     @Override

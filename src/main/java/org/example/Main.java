@@ -34,6 +34,8 @@ public static void main(String[] args) {
         int ROBOT_MODE = Integer.parseInt(config.getRobotMode());
         int MOTOR_A_DIRECTION = Integer.parseInt(config.getMotorADirection());
         int MOTOR_B_DIRECTION = Integer.parseInt(config.getMotorBDirection());
+        int MOTOR_A_POWER = Integer.parseInt(config.getMotorAPower());
+        int MOTOR_B_POWER = Integer.parseInt(config.getMotorBPower());
 
         // Connecting to a microcontroller
         try {
@@ -58,6 +60,9 @@ public static void main(String[] args) {
         // Robot's motors settings
         robotController.setMotorADirection(MOTOR_A_DIRECTION);
         robotController.setMotorBDirection(MOTOR_B_DIRECTION);
+
+        robotController.setMotorAPower(MOTOR_A_POWER);
+        robotController.setMotorBPower(MOTOR_B_POWER);
 
         // Openning the socket
         System.out.println("# Waiting for the tester to grant access...");

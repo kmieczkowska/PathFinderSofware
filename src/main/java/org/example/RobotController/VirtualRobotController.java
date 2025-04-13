@@ -20,6 +20,16 @@ public class VirtualRobotController implements IRobotController {
     }
 
     @Override
+    public void setMotorBPower(int power) {
+
+    }
+
+    @Override
+    public void setMotorAPower(int power) {
+
+    }
+
+    @Override
     public void setMotorADirectionForward() {motorADirection = 1;}
     @Override
     public void setMotorADirectionBackward() {motorADirection = -1;}
@@ -54,6 +64,11 @@ public class VirtualRobotController implements IRobotController {
     @Override
     public void setMovmentSpeed(int motorA, int motorB) {
         System.out.println("Setting movement speed");
+    }
+
+    @Override
+    public void setMovmentSpeed() {
+
     }
 
     @Override
