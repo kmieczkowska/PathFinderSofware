@@ -2,69 +2,83 @@ package org.example;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fazecast.jSerialComm.SerialPort;
+import org.example.Camera.CameraDetector;
 import org.example.Configuration.ConfigurationLoader;
 import org.example.RobotController.IRobotController;
 import org.example.RobotController.RobotController;
 import org.example.RobotController.VirtualRobotController;
+import org.opencv.core.Core;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class Main {
 
-        public static void main(String[] args) {
+public static void main(String[] args) {
+
+        /*WARNING!*/
+        /*Remember to set the appropriate MODE in "configuration.properties" file!*/
 
         SerialPort serialPort = null;
-        OutputStream outputStream = null;
-        InputStream inputStream = null;
+        boolean initializationPort = true;
         IRobotController robotController;
-        boolean initializionPort = false;
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
 
-        // Wczytanie wartości z pliku kofiguracyjnego
+        // Loading the configuration
         ConfigurationLoader config = new ConfigurationLoader("configuration.properties");
-        int SERIAL_LOCAL_MODE = Integer.valueOf(config.getSerialMode());
-        int ROBOT_MODE = Integer.valueOf(config.getRobotMode());
-        int MOTOR_A_DIRECTION = Integer.valueOf(config.getMotorADirection());
-        int MOTOR_B_DIRECTION = Integer.valueOf(config.getMotorBDirection());
 
-        // Próba połączenia się z mikrokontrolerem robota do sterowania robotem
+        int SERIAL_LOCAL_MODE = Integer.parseInt(config.getSerialMode());
+        int ROBOT_MODE = Integer.parseInt(config.getRobotMode());
+        int MOTOR_A_DIRECTION = Integer.parseInt(config.getMotorADirection());
+        int MOTOR_B_DIRECTION = Integer.parseInt(config.getMotorBDirection());
+
+        // Connecting to a microcontroller
         try {
-                if(SERIAL_LOCAL_MODE ==  1){serialPort = SerialPort.getCommPort("COM3");}
-                else{ serialPort = SerialPort.getCommPort("/dev/ttyACM0"); }
+                if (SERIAL_LOCAL_MODE == 1) {
+                        serialPort = SerialPort.getCommPort("COM3");
+                } else {
+                        serialPort = SerialPort.getCommPort("/dev/ttyACM0");
+                }
                 serialPort.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
                 serialPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
-                initializionPort = serialPort.openPort();
+                initializationPort = serialPort.openPort();
+        } catch (Exception e) {
+                e.printStackTrace();
         }
-        catch (Exception e) {e.printStackTrace();}
-        if(initializionPort) robotController = new RobotController(serialPort);
-        else robotController = new VirtualRobotController();
 
+        if (initializationPort) {
+                robotController = new RobotController(serialPort);
+        } else {
+                robotController = new VirtualRobotController();
+        }
+
+        // Robot's motors settings
         robotController.setMotorADirection(MOTOR_A_DIRECTION);
         robotController.setMotorBDirection(MOTOR_B_DIRECTION);
 
-        // Otworzenie soketu czekanie na połączenie z clientem
-//        System.out.println("Waiting for client connection...");
-//        int serverPort = 1234;
-//        try (ServerSocket serverSocket = new ServerSocket(serverPort)) {
-//                Socket socket = serverSocket.accept();
-//                outputStream = socket.getOutputStream();
-//                inputStream = socket.getInputStream();
-//        } catch (Exception e) {
-//                e.printStackTrace();
-//        }
+        // Openning the socket
+        System.out.println("# Waiting for the tester to grant access...");
+        int serverPort = 1234;
+        try (ServerSocket serverSocket = new ServerSocket(serverPort)) {
+                Socket socket = serverSocket.accept();
+                System.out.println("# I've connected to the tester!");
 
-        //ServerCommunication serverCommunication = new ServerCommunication(robotController,inputStream,outputStream);
+                outputStream = socket.getOutputStream();
+                inputStream = socket.getInputStream();
 
-        //CameraDetector detector = new CameraDetector(robotController,inputStream,outputStream);
+                if (ROBOT_MODE == 0) { // Testing the project by pc and camera
+                        CameraDetector detector = new CameraDetector(robotController, inputStream, outputStream);
+                        detector.start();
+                }
+                else if (ROBOT_MODE == 1) { // Testing the project by robot
+                        robotController.saveDataRobot();
+                }
 
-        //if(ROBOT_MODE == 0){ detector.start(); }
-        if(ROBOT_MODE == 1){
-            try {
-                robotController.saveDataRobot();
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
+        } catch (Exception e) {
+                e.printStackTrace();
         }
-
-    }
+}
 }

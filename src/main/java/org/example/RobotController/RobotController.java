@@ -60,50 +60,7 @@ public class RobotController implements IRobotController {
 
     public void strategy_1() throws JsonProcessingException {
         readRobotData();
-//
-//        switch (sensorValues) {
-//            case "01111":
-//                turnLeft();
-//                delay(300);
-//                emergencyStop();
-//                break;
-//            case "01111":
-//                turnLeft();
-//                delay(300);
-//                emergencyStop();
-//                break;
-//
-//                default:
-//                    emergencyStop();
-//                    break;
-//            }
-
     }
-
-    /**
-     * emergencyStop
-     * wysyla znak 0 na port szeregowy (w stm zatrzymanie robota)
-     */
-//    @Override
-//    public void emergencyStop() {
-//        serialPort.writeBytes("0\n".getBytes(), 2);
-//    }
-//    @Override
-//    public void moveForward() {
-//        serialPort.writeBytes("1\n".getBytes(), 2);
-//    }
-//    @Override
-//    public void moveReverse(){
-//        serialPort.writeBytes("2\n".getBytes(), 2);
-//    }
-//    @Override
-//    public void turnLeft(){
-//        serialPort.writeBytes("3\n".getBytes(), 2);
-//    }
-//    @Override
-//    public void turnRight(){
-//        serialPort.writeBytes("4\n".getBytes(), 2);
-//    }
 
     @Override
     public void emergencyStop() {
@@ -137,18 +94,15 @@ public class RobotController implements IRobotController {
         serialPort.writeBytes(message.getBytes(), message.length());
     }
 
-
     /**
      * Ustawienie predkosci na kazdym silniku
      * @return string z portu szeregowego
      */
     @Override
     public String getRobotData() {
-
         String command = "7\n";
         int bytesSent = serialPort.writeBytes(command.getBytes(), command.length());
         return Integer.toString(bytesSent);
-
     }
 
     /**
@@ -163,6 +117,7 @@ public class RobotController implements IRobotController {
             Thread.currentThread().interrupt();
         }
     }
+
     //lewe koło jedzie do przodu 100%
     @Override
     public void leftWheelForward() {
@@ -183,7 +138,6 @@ public class RobotController implements IRobotController {
     public void sendCommand(String command){
         serialPort.writeBytes((command + "\n").getBytes(), 2);
     }
-
 
     /**
      * Strategia dzialania robota
@@ -289,9 +243,6 @@ public class RobotController implements IRobotController {
         }
     }
 
-
-
-
     static class RobotDataJson{
         @JsonCreator
         public RobotDataJson(@JsonProperty("sensorValue1") int sensorValue1,
@@ -336,28 +287,35 @@ public class RobotController implements IRobotController {
             this.Temp = Temp;
         }
 
+        // czujniki podczerwone - 5
+        // daja wartosc zakresu do stweirdzenia koloru czanrego/bialego
         private int sensorValue1;
         private int sensorValue2;
         private int sensorValue3;
         private int sensorValue4;
         private int sensorValue5;
 
+        // aktualna pozycja robota po wyliczeniu
         private float xPos;
         private float yPos;
         private float theta;
 
+        // aktualna pozycja koła 1/2
         private int rawAngle1;
         private int rawAngle2;
 
+        // żyroskop- pozycja robota na świecie
         private float xGyro;
         private float yGyro;
         private float zGyro;
 
+        // akcelerometr - przeciążenia
         private float xAccel;
         private float yAccel;
         private float zAccel;
-        private float Temp;
 
+        // temperatura
+        private float Temp;
 
         public int getSensorValue1() {
             return sensorValue1;
@@ -416,8 +374,6 @@ public class RobotController implements IRobotController {
         }
 
     }
-
-
 
             // Buffer for received data
 //            while (true) {
@@ -483,6 +439,7 @@ public class RobotController implements IRobotController {
 //                    emergencyStop();
 //                    break;
 //            }
+
     public void debug(){
 
         System.out.println("[DEBUG] send move forward.");

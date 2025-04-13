@@ -3,21 +3,18 @@ package org.example.Camera;
 import org.example.RobotController.IRobotController;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Przetwarzanie obrazu kamerki
+ * Przetwarzanie obrazu kamery
  */
 public class ImageProcesor {
 
     private IRobotController robotController;
-
     private boolean isRunning = true;
 
     private int treshold = 50;
-
     public void setTreshold(int treshold) {this.treshold = treshold;}
 
     public void setStart(){
@@ -31,13 +28,35 @@ public class ImageProcesor {
         robotController = _robotController;
     }
 
+    public Mat strategy3(Mat frame) {
+
+        int width = frame.width();
+        int height = frame.height();
+
+        Mat grayFrame = new Mat();
+        Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY);
+
+        // Binaryzacja obrazu: szukamy czarnych obiektów (jasne tło -> ciemne obiekty)
+        Mat binaryFrame = new Mat();
+        Imgproc.threshold(grayFrame, binaryFrame, treshold, 255, Imgproc.THRESH_BINARY_INV);
+
+        // Znajdowanie konturów czarnych obiektów
+        List<MatOfPoint> contours = new ArrayList<>();
+        Mat hierarchy = new Mat();
+        Imgproc.findContours(binaryFrame, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+
+        return frame;
+    }
+
     /**
-     * Dzieli ekran kamery na cztery równe części i oznacza je jako A, B, C, D.
+     * TO DO - it's not working
+     * podziału na 4 części
+     * porównywanie ilości pikseli po wybranych stronach
+     * Ustawianie mocy motorów na podstawie części A, B, C lub D
      *
-     * @param frame Obraz z kamerki.
-     * @return Obraz z naniesionym podziałem i etykietami.
+     * PROBLEM:
      */
-    public Mat strategy1(Mat frame) {
+    public Mat strategy2(Mat frame) {
 
         // Dzielenie obrazu na 4 części
         int width = frame.width();
@@ -148,52 +167,57 @@ public class ImageProcesor {
         return outputFrame;
     }
 
-    public Mat strategy2(Mat frame){
-        // Dzielenie obrazu na 4 części
+    /**
+     * IT WORKS
+     * Przetwarzanie obrazu kamery używając:
+     * podziału na 2 części
+     * porównywanie ilości pikseli po wybranych stronach
+     */
+    public Mat strategy1(Mat frame){
+
+        String comparisonResult; // Comparison which part has more pixels
+
+        // Dividing the image into 2 parts (left | right)
         int width = frame.width();
-        int height = frame.height();
-
-        String comparisonResult;
-
-        // Linie podziału
         int midX = width / 2;
+
+        int height = frame.height();
         int midY = height / 2;
 
 
-        //region Konwersja obrazu na skalę szarości i binaryzacja
-
+        // Image conversion to grayscale and binarization
         Mat grayFrame = new Mat();
-        Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY); // GrayScale
 
         Mat binaryFrame = new Mat();
-        Imgproc.threshold(grayFrame, binaryFrame, treshold, 255, Imgproc.THRESH_BINARY_INV); // prog
+        Imgproc.threshold(grayFrame, binaryFrame, treshold, 255, Imgproc.THRESH_BINARY_INV); // Setting the threshold
 
-        // Konwersja binaryzowanego obrazu z powrotem na format BGR, aby móc na nim rysować linie i etykiety
+        // Conversion a binarized image back to RGB format - we will be able to draw lines and labels on a video
         Mat outputFrame = new Mat();
         Imgproc.cvtColor(binaryFrame, outputFrame, Imgproc.COLOR_GRAY2BGR);
 
+        // Settings parts
+        Mat sectionA = binaryFrame.submat(0, height, 0, midX); // left part of a video
+        Mat sectionB = binaryFrame.submat(0, height, midX, width); // right part of a video
 
-        Mat sectionA = binaryFrame.submat(0, height, 0, midX); // Górna lewa
-        Mat sectionB = binaryFrame.submat(0, height, midX, width); // Górna prawa
-
-
+        // Counting pixels on each part
         int blackPixelsA = Core.countNonZero(sectionA);
         int blackPixelsB = Core.countNonZero(sectionB);
 
         if (blackPixelsA > blackPixelsB) {
             robotController.leftWheelForward();
-            comparisonResult = "Lewo";
+            comparisonResult = "Left";
         }
         else if (blackPixelsB > blackPixelsA) {
             robotController.rightWheelForward();
-            comparisonResult = "Prawo";
+            comparisonResult = "Right";
         }
         else{
-            comparisonResult = "Jazda";
+            comparisonResult = "Forward";
             robotController.moveForward();
         }
 
-        Imgproc.line(outputFrame, new Point(midX, 0), new Point(midX, height), new Scalar(0, 0, 255), 2); // Pionowa linia
+        Imgproc.line(outputFrame, new Point(midX, 0), new Point(midX, height), new Scalar(0, 0, 255), 2); // Red vertical line
         Imgproc.putText(outputFrame, "A", new Point(midX / 2, midY), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
         Imgproc.putText(outputFrame, "B", new Point(midX + midX / 2, midY), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
         Imgproc.putText(outputFrame, comparisonResult, new Point(10, 30), Imgproc.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar(0, 255, 0), 2);
@@ -201,7 +225,16 @@ public class ImageProcesor {
         return outputFrame;
     }
 
-    public Mat proses(Mat frame){
+    /**
+     * TO DO - it's not working
+     * Przetwarzanie obrazu kamery - wersja 1
+     * Wyszukiwanie bialych i czarnych elementów na kamerze
+     * Zaznaczanie elementów na kamerze
+     * Na podstawie położenia zaznaczonych elementów na osi X określanie, w którym kierunku ma jechać robot
+     *
+     * PROBLEM: zbyt duża reakcja na światło i niedoskonałości
+     */
+    public Mat initialStrategy0(Mat frame){
 
         Mat grayFrame = new Mat();
         Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY);

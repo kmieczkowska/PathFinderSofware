@@ -14,13 +14,10 @@ public class VirtualRobotController implements IRobotController {
     public void setMotorADirection(int direction) {
         motorADirection = direction;
     }
-
     @Override
     public void setMotorBDirection(int direction) {
         motorBDirection = direction;
     }
-
-
 
     @Override
     public void setMotorADirectionForward() {motorADirection = 1;}
@@ -37,9 +34,7 @@ public class VirtualRobotController implements IRobotController {
     }
 
     @Override
-    public void moveForward() {
-        System.out.println("Moving forward");
-    }
+    public void moveForward() {}
 
     @Override
     public void moveReverse() {
@@ -67,20 +62,13 @@ public class VirtualRobotController implements IRobotController {
     }
 
     @Override
-    public void showRobotData() throws JsonProcessingException {
-
-    }
+    public void showRobotData() throws JsonProcessingException {}
 
     @Override
-    public void strategy_1() throws JsonProcessingException {
-
-    }
+    public void strategy_1() throws JsonProcessingException {}
 
     @Override
-    public void saveDataRobot() throws JsonProcessingException {
-
-    }
-
+    public void saveDataRobot() throws JsonProcessingException {}
     @Override
     public String getRobotData() {
         return "10101";
@@ -101,14 +89,10 @@ public class VirtualRobotController implements IRobotController {
     }
 
     @Override
-    public void leftWheelForward() {
-        System.out.println("Left wheel forward");
-    }
+    public void leftWheelForward() {}
 
     @Override
-    public void rightWheelForward() {
-        System.out.println("Right wheel forward");
-    }
+    public void rightWheelForward() {}
 
     @Override
     public void setFlashlightBrightness(int brightness) {
