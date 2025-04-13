@@ -76,15 +76,15 @@ public static void main(String[] args) {
                 inputStream = socket.getInputStream();
 
                 if (ROBOT_MODE == 0) { // Testing the project by pc and camera
-                        Thread robotDataHandler = new Thread(() -> {
-                                try {
-                                        robotController.saveDataRobot();
-                                }
-                                 catch (IOException e) {
-                                        e.printStackTrace();
-                                }
-                        });
-                robotDataHandler.start();
+//                        Thread robotDataHandler = new Thread(() -> {
+//                                try {
+//                                        robotController.saveDataRobot();
+//                                }
+//                                 catch (IOException e) {
+//                                        e.printStackTrace();
+//                                }
+//                        });
+//                robotDataHandler.start();
                 CameraDetector detector = new CameraDetector(robotController, inputStream, outputStream);
                 detector.start();
                 }
