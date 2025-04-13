@@ -6,6 +6,7 @@ import org.example.RobotController.IRobotController;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -41,7 +42,11 @@ public class CameraDetector {
 
             System.out.println("• Camera opening...");
 
-            VideoCapture capture = new VideoCapture(0);  // 0 - usb camera
+//            VideoCapture capture = new VideoCapture(0);  // 0 - usb camera
+            VideoCapture capture = new VideoCapture(
+                    "libcamerasrc ! video/x-raw, width=640, height=480, framerate=30/1 ! videoconvert ! appsink",
+                    Videoio.CAP_GSTREAMER
+            );
             if (!capture.isOpened()) {
                 System.out.println("Error: Cannot open video source.");
                 return;
