@@ -76,13 +76,6 @@ public class RobotController implements IRobotController {
         setMovmentSpeed(0,0);
     }
     @Override
-    public void moveForward() {
-        setMovmentSpeed(
-                (((motorADirection*100) + 100)*motorAPower)/100,
-                ((motorBDirection *100)+ 100)*motorBPower/100
-        );
-    }
-    @Override
     public void moveReverse(){
         setMovmentSpeed((motorADirection*100) + 100,(motorBDirection *100)+ 100);
     }
@@ -136,15 +129,25 @@ public class RobotController implements IRobotController {
         }
     }
 
+    @Override
+    public void moveForward() {
+        setMovmentSpeed(
+                ((motorADirection*100) + 100) - motorAPower,
+                ((motorBDirection *100)+ 100) - motorBPower
+        );
+    }
+    
     //lewe koło jedzie do przodu 100%
     @Override
     public void leftWheelForward() {
-        setMovmentSpeed((((motorADirection*100) + 100) * motorAPower)/100,0);
+//        setMovmentSpeed((((motorADirection*100) + 100) * motorAPower)/100,0);
+        setMovmentSpeed(((motorADirection*100) + 100) - motorAPower ,0);
     }
     //prawe koło jedzie do przodu 100%
     @Override
     public void rightWheelForward() {
-        setMovmentSpeed(0,(((motorBDirection*100) + 100) * motorBPower)/100);
+//        setMovmentSpeed(0,(((motorBDirection*100) + 100) * motorBPower)/100);
+        setMovmentSpeed(0, ((motorBDirection * 100) + 100) - motorBPower);
     }
 
     @Override
