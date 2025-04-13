@@ -205,13 +205,13 @@ public class ImageProcesor {
         int blackPixelsB = Core.countNonZero(sectionB);
 
         if (blackPixelsA > blackPixelsB) {
-//            robotController.rightWheelForward();
-            robotController.setMovmentSpeed();
+            robotController.rightWheelForward();
+//            robotController.setMovmentSpeed();
             comparisonResult = "Left";
         }
         else if (blackPixelsB > blackPixelsA) {
-//            robotController.leftWheelForward();
-            robotController.setMovmentSpeed();
+            robotController.leftWheelForward();
+//            robotController.setMovmentSpeed();
             comparisonResult = "Right";
         }
         else{
