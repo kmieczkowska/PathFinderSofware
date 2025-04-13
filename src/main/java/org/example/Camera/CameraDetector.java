@@ -42,11 +42,7 @@ public class CameraDetector {
 
             System.out.println("• Camera opening...");
 
-//            VideoCapture capture = new VideoCapture(0);  // 0 - usb camera
-            VideoCapture capture = new VideoCapture(
-                    "libcamerasrc ! video/x-raw, width=640, height=480, framerate=30/1 ! videoconvert ! appsink",
-                    Videoio.CAP_GSTREAMER
-            );
+            VideoCapture capture = new VideoCapture(0);  // 0 - usb camera
             if (!capture.isOpened()) {
                 System.out.println("Error: Cannot open video source.");
                 return;
