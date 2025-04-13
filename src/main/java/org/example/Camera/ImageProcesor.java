@@ -219,6 +219,7 @@ public class ImageProcesor {
             robotController.moveForward();
         }
 
+
         Imgproc.line(outputFrame, new Point(midX, 0), new Point(midX, height), new Scalar(0, 0, 255), 2); // Red vertical line
         Imgproc.putText(outputFrame, "A", new Point(midX / 2, midY), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
         Imgproc.putText(outputFrame, "B", new Point(midX + midX / 2, midY), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);

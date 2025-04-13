@@ -9,6 +9,7 @@ import org.example.RobotController.RobotController;
 import org.example.RobotController.VirtualRobotController;
 import org.opencv.core.Core;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
@@ -75,8 +76,17 @@ public static void main(String[] args) {
                 inputStream = socket.getInputStream();
 
                 if (ROBOT_MODE == 0) { // Testing the project by pc and camera
-                        CameraDetector detector = new CameraDetector(robotController, inputStream, outputStream);
-                        detector.start();
+                        Thread robotDataHandler = new Thread(() -> {
+                                try {
+                                        robotController.saveDataRobot();
+                                }
+                                 catch (IOException e) {
+                                        e.printStackTrace();
+                                }
+                        });
+                robotDataHandler.start();
+                CameraDetector detector = new CameraDetector(robotController, inputStream, outputStream);
+                detector.start();
                 }
                 else if (ROBOT_MODE == 1) { // Testing the project by robot
                         robotController.saveDataRobot();

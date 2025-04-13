@@ -215,7 +215,7 @@ public class RobotController implements IRobotController {
         int numRead = 0;
 
         System.out.println("Processing started at: " + new java.util.Date());
-        try (FileWriter writer = new FileWriter("python" + File.separator + "data" + File.separator+"RobotData2.csv" )) {
+        try (FileWriter writer = new FileWriter("python" + File.separator + "data" + File.separator+"sensorAchievemnet.csv" )) {
             writer.append("nanoTime,sensorValue1,sensorValue2,sensorValue3,sensorValue4,sensorValue5,");
             writer.append("xPos,yPos,theta,");
             writer.append("rawAngle1,rawAngle2,");
