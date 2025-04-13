@@ -1,4 +1,4 @@
-# ClientPathFinder
+# PathFinderSoftware
 
 Kod mozna uruchomic poleceniami
 ```
@@ -18,7 +18,9 @@ docker build -t pathfinderclient:v1.0 .
 ```
 
 
-
+# TO-DO
+- DOdanie testowej strategii
+- napisanie testów kodu
   
 # Done
 - ✅ Zliczanie i wyświetlanie parametrów z jakimi wykonuje się (kod fps kamerki, czas wysyłania)
