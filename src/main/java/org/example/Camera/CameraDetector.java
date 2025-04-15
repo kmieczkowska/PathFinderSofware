@@ -59,7 +59,7 @@ public class CameraDetector {
                 if (capture.read(frame)) {
 
                     try {
-                        frame = imageProcesor.strategy1(frame); // CHOSE YOUR STRATEGY!!
+                        frame = imageProcesor.strategy4(frame); // CHOSE YOUR STRATEGY!!
 
                         Imgcodecs.imencode(".jpg", frame, buffer);
                         byte[] imageBytes = buffer.toArray();

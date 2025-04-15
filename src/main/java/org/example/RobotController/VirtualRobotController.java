@@ -63,7 +63,7 @@ public class VirtualRobotController implements IRobotController {
 
     @Override
     public void setMovmentSpeed(int motorA, int motorB) {
-        System.out.println("Setting movement speed");
+//        System.out.println("Setting movement speed");
     }
 
     @Override

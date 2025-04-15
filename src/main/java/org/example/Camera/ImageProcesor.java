@@ -28,6 +28,288 @@ public class ImageProcesor {
         robotController = _robotController;
     }
 
+    private String lastDirection = "";  // last direction (left, right, forward)
+    private boolean lineLost = false;   // wether the line was lost
+
+    // Tolerancja - liczba klatek, przez które robot będzie czekał bez wykrywania linii
+    private int lostLineFrames = 0;
+    private int lostLineThreshold = 10;  // steable - SPRAWDZIC JAKI PROG BEDZIE OK
+
+
+    public Mat strategy6(Mat frame) {
+        int width = frame.width();
+        int height = frame.height();
+
+        Mat grayFrame = new Mat();
+        Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY);
+
+        Mat binaryFrame = new Mat();
+        Imgproc.threshold(grayFrame, binaryFrame, 100, 255, Imgproc.THRESH_BINARY_INV);
+
+        // Wiersz analizowany (np. ¾ wysokości obrazu)
+        int rowToScan = (int)(height * 0.75);
+        Mat row = binaryFrame.row(rowToScan);
+
+        // Szukanie pierwszego czarnego piksela (lewa krawędź linii)
+        int linePositionX = -1;
+        for (int x = 0; x < width; x++) {
+            double[] pixel = row.get(0, x);
+            if (pixel != null && pixel.length > 0 && pixel[0] > 0) {
+                linePositionX = x;
+                break;
+            }
+        }
+
+        // Konwersja z powrotem do koloru aby narysować wynik
+        Mat outputFrame = new Mat();
+        Imgproc.cvtColor(binaryFrame, outputFrame, Imgproc.COLOR_GRAY2BGR);
+
+        // Środek obrazu
+        int centerX = width / 2;
+        String direction;
+
+        if (linePositionX != -1) {
+            // Zaznacz wykryty punkt
+            Imgproc.circle(outputFrame, new Point(linePositionX, rowToScan), 5, new Scalar(0, 255, 0), -1);
+
+            // Prosta logika sterowania
+            int tolerance = 20; // margines tolerancji
+
+            // Zgubienie linii: Jeżeli robot nie widzi linii przez określoną liczbę klatek
+            lostLineFrames = 0;  // Resetujemy liczbę klatek bez linii, bo linia została wykryta
+            lineLost = false;    // Linia nie została zgubiona
+
+            if (linePositionX < centerX - tolerance) {
+                direction = "Turn Left";
+                lastDirection = "left";  // Zapamiętanie kierunku
+                robotController.leftWheelForward();
+            } else if (linePositionX > centerX + tolerance) {
+                direction = "Turn Right";
+                lastDirection = "right";  // Zapamiętanie kierunku
+                robotController.rightWheelForward();
+            } else {
+                direction = "Forward";
+                lastDirection = "forward";  // Zapamiętanie kierunku
+                robotController.moveForward();
+            }
+        } else {
+            // Jeśli nie wykryto konturów, linia została zgubiona
+            lostLineFrames++;
+
+            if (lostLineFrames > lostLineThreshold) {
+                lineLost = true;  // Linia została zgubiona
+                lostLineFrames = 0;  // Resetujemy licznik
+
+                // Reakcja na zgubienie linii: obrócenie w przeciwnym kierunku
+                if ("left".equals(lastDirection)) {
+                    direction = "Line Lost - Turn Right";  // Obracamy w prawo, jeśli ostatnio skręcał w lewo
+                    robotController.rightWheelForward();  // Obróć w prawo
+                } else if ("right".equals(lastDirection)) {
+                    direction = "Line Lost - Turn Left";  // Obracamy w lewo, jeśli ostatnio skręcał w prawo
+                    robotController.leftWheelForward();  // Obróć w lewo
+                } else {
+                    // Jeśli robot jechał do przodu, wybieramy obrót w prawo lub lewo
+                    direction = "Line Lost - Turn Right";  // Możemy wybrać dowolnie
+                    robotController.rightWheelForward();  // Obróć w prawo
+                }
+            } else {
+                direction = "Line Lost - Searching...";
+                robotController.setMovmentSpeed(0, 0);  // Zatrzymaj robota, gdy nie wykrywa linii
+            }
+        }
+
+        // Dodanie informacji na ekranie
+        Imgproc.putText(outputFrame, direction, new Point(10, 30), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(255, 0, 0), 2);
+        Imgproc.line(outputFrame, new Point(centerX, 0), new Point(centerX, height), new Scalar(0, 0, 255), 1); // pionowy środek
+
+        return outputFrame;
+    }
+
+    /**
+     * TO DO - READY TO TEST
+     * Robot wykrywa prostokąty - czarną linię
+     * podąża za prostokątem
+     * PROBLEM: światło
+     */
+    public Mat strategy5(Mat frame) {
+        int width = frame.width();
+        int height = frame.height();
+
+        Mat grayFrame = new Mat();
+        Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY);
+
+        Mat binaryFrame = new Mat();
+        Imgproc.threshold(grayFrame, binaryFrame, treshold, 255, Imgproc.THRESH_BINARY_INV);  // black line, white bckgr
+
+        // Looking for contours on binary frame
+        List<MatOfPoint> contours = new ArrayList<>();
+        Mat hierarchy = new Mat();
+        Imgproc.findContours(binaryFrame, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+
+        Mat outputFrame = new Mat();
+        Imgproc.cvtColor(binaryFrame, outputFrame, Imgproc.COLOR_GRAY2BGR);
+
+        // If contours detected
+        if (contours.size() > 0) {
+            // Find the biggest one, which can be the line
+            double maxArea = 0;
+            MatOfPoint maxContour = null;
+
+            for (MatOfPoint contour : contours) {
+                double area = Imgproc.contourArea(contour);
+                if (area > maxArea) {
+                    maxArea = area;
+                    maxContour = contour;
+                }
+            }
+
+            if (maxContour != null) {
+                // Calculate rectangle surrounding the contour
+                Rect boundingBox = Imgproc.boundingRect(maxContour);
+                int centerX = boundingBox.x + boundingBox.width / 2;  // middle point
+
+                // Drawing rectangle
+                Imgproc.rectangle(outputFrame, boundingBox.tl(), boundingBox.br(), new Scalar(0, 255, 0), 2);
+
+                // Determining the direction depending on the location of the line
+                int frameCenterX = width / 2;
+                int tolerance = 50;
+
+                if (centerX < frameCenterX - tolerance) {
+                    lastDirection = "right";  // remembering the direction
+//                    robotController.setMovmentSpeed(60, 30);
+                    robotController.rightWheelForward();
+                } else if (centerX > frameCenterX + tolerance) {
+
+                    lastDirection = "left";
+//                    robotController.setMovmentSpeed(30, 60);
+                    robotController.leftWheelForward();
+                } else {
+                    lastDirection = "forward";
+                    robotController.moveForward();
+                }
+
+                lostLineFrames = 0;  // Resetting the frame count without lines
+                lineLost = false;    // The line was not lost
+            }
+        } else {
+            // If no contours are detected, we assume the line is lost
+            lostLineFrames++;
+
+            if (lostLineFrames > lostLineThreshold) {
+                lineLost = true;  // The line was lost
+                lostLineFrames = 0;  // We reset the counter
+
+                // Rotate in the opposite direction to the last one
+                if ("left".equals(lastDirection)) {
+                    robotController.turnRight();
+                } else if ("right".equals(lastDirection)) {
+                    robotController.turnLeft();
+                } else {
+                    // If it was moving forward, start turning right or left (any)
+                    robotController.turnRight();
+                }
+            } else {
+//                robotController.setMovmentSpeed(0, 0);  // Stop ODKOMENTOWAC I SPRAWDZIC JAK DZIALA
+            }
+        }
+
+        String directionInfo = lineLost ? "Line Lost" : "Following Line";
+        Imgproc.putText(outputFrame, directionInfo, new Point(10, 30), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(255, 0, 0), 2);
+
+        return outputFrame;
+    }
+
+    /**
+     * TO DO - READY TO TEST
+     * Robot wykrywa krawdz czarnej linii na bialym tle
+     * trzyma sie tej krawedzi - zaznacza punkt na kamerze za ktorym podaza
+     * PROBLEM:
+     */
+    public Mat strategy4(Mat frame) {
+
+        int width = frame.width();
+        int height = frame.height();
+
+        Mat grayFrame = new Mat();
+        Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY);
+
+        Mat binaryFrame = new Mat();
+        Imgproc.threshold(grayFrame, binaryFrame, treshold, 255, Imgproc.THRESH_BINARY_INV);
+
+        // Wiersz analizowany (np. ¾ wysokości obrazu)
+        int rowToScan = (int)(height * 0.75);
+        Mat row = binaryFrame.row(rowToScan);
+
+        // Szukanie pierwszego czarnego piksela (lewa krawędź linii)
+        int linePositionX = -1;
+        for (int x = 0; x < width; x++) {
+            double[] pixel = row.get(0, x);
+            if (pixel != null && pixel.length > 0 && pixel[0] > 0) {
+                linePositionX = x;
+                break;
+            }
+        }
+
+        // Szukanie pierwszego czarnego piksela (prawa krawędź linii)
+//        int linePositionX = -1;
+//        for (int x = width - 1; x >= 0; x--) { // Przechodzimy od prawej do lewej
+//            double[] pixel = row.get(0, x);
+//            if (pixel != null && pixel.length > 0 && pixel[0] > 0) {
+//                linePositionX = x;
+//                break;
+//            }
+//        }
+
+        // Konwersja z powrotem do koloru aby narysować wynik
+        Mat outputFrame = new Mat();
+        Imgproc.cvtColor(binaryFrame, outputFrame, Imgproc.COLOR_GRAY2BGR);
+
+        // Środek obrazu
+        int centerX = width / 2;
+
+        String direction;
+
+        if (linePositionX != -1) {
+            // Zaznacz wykryty punkt
+            Imgproc.circle(outputFrame, new Point(linePositionX, rowToScan), 5, new Scalar(0, 255, 0), -1);
+
+            // Prosta logika sterowania
+            int tolerance = 20; // margines tolerancji
+
+            if (linePositionX < centerX - tolerance) {
+                direction = "Turn Left";
+//                robotController.setMovmentSpeed(30, 60);
+                robotController.leftWheelForward();
+            } else if (linePositionX > centerX + tolerance) {
+                direction = "Turn Right";
+//                robotController.setMovmentSpeed(60, 30);
+                robotController.rightWheelForward();
+            } else {
+                direction = "Forward";
+                robotController.moveForward();
+            }
+        } else {
+            direction = "Line lost - Stop";
+            robotController.setMovmentSpeed(0, 0); // lub szukaj linii
+        }
+
+        // Dodanie informacji na ekranie
+        Imgproc.putText(outputFrame, direction, new Point(10, 30), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(255, 0, 0), 2);
+        Imgproc.line(outputFrame, new Point(centerX, 0), new Point(centerX, height), new Scalar(0, 0, 255), 1); // pionowy środek
+
+        return outputFrame;
+    }
+
+    /**
+     * TO DO - it's not working
+     * podziału na 4 części
+     * porównywanie ilości pikseli po wybranych stronach
+     * Ustawianie mocy motorów na podstawie części A, B, C lub D
+     *
+     * PROBLEM:
+     */
+
     public Mat strategy3(Mat frame) {
 
         int width = frame.width();
