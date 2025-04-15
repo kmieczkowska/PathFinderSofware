@@ -81,9 +81,11 @@ public static void main(String[] args) {
 
                 CameraDetector detector = new CameraDetector(robotController, inputStream, outputStream, ROBOT_STRATEGY);
 
+                detector.start(clockService);
+
                 robotController.saveDataRobot(clockService,NAME_OF_CVS_FILE);
 
-                detector.start(clockService);
+
 
                 clockService.start();
 

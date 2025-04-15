@@ -64,6 +64,9 @@ public class CameraDetector {
 
                     try {
                         switch (ROBOT_STRATEGY){
+                            case 1:
+                                frame = imageProcesor.strategy1(frame);
+                                break;
                             case 2:
                                 frame = imageProcesor.strategy2(frame);
                                 break;

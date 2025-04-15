@@ -239,7 +239,6 @@ public class RobotController implements IRobotController {
 
 
     public void saveDataRobot(ClockService clockService, String NAME_OF_CVS_FILE) throws JsonProcessingException, InterruptedException {
-
         Thread saveDataHandler = new Thread(() -> {
 
             long startTime;
