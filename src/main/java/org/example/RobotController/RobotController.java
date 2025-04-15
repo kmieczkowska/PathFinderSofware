@@ -276,7 +276,7 @@ public class RobotController implements IRobotController {
                     } catch (Exception e) {
                         System.err.println("Serial communication failed: " + e.getMessage());
                         e.printStackTrace();
-                        continue; 
+                        continue;
                     }
                     if (numRead > 0) {
                         receivedData = new String(buffer, 0, numRead);

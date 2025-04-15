@@ -95,6 +95,9 @@ public static void main(String[] args) {
                 detector.join();
                 robotController.join();
 
+                robotController.setMovmentSpeed(0,0);
+                serialPort.closePort();
+
                 }
 
         } catch (Exception e) {
