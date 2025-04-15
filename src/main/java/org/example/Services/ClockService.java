@@ -16,12 +16,15 @@ public class ClockService {
         return counter;
     }
 
-    public void start(){
-        long startTime;
-        final long TEST_DURATION_NS = 30_000_000_000L;
-        startTime = System.nanoTime();
-        while(System.nanoTime() - startTime < TEST_DURATION_NS);
-        running.set(false);
+    public void start() {
+        running.set(true);
+        new Thread(() -> {
+            long startTime;
+            final long TEST_DURATION_NS = 30_000_000_000L;
+            startTime = System.nanoTime();
+            while (System.nanoTime() - startTime < TEST_DURATION_NS);
+            running.set(false);
+        }).start();
     }
 
 

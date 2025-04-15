@@ -180,7 +180,7 @@ public class RobotController implements IRobotController {
         //setMovmentSpeed((((motorADirection*100) + 100) * motorAPower)/100,0);
         setMovmentSpeed(((motorADirection * 100) + 100) - motorAPower, 0);
         int test = ((motorADirection * 100) + 100) - motorAPower;
-        System.out.println("leftwheelforward" + test);
+        //System.out.println("leftwheelforward" + test);
     }
 
     //prawe koło jedzie do przodu 100%
@@ -189,7 +189,7 @@ public class RobotController implements IRobotController {
         //setMovmentSpeed(0,(((motorBDirection*100) + 100) * motorBPower)/100);
         setMovmentSpeed(0, ((motorBDirection * 100) + 100) - motorBPower);
         int test = ((motorBDirection * 100) + 100) - motorBPower;
-        System.out.println("rightwheelforward" + test);
+        //System.out.println("rightwheelforward" + test);
     }
 
     @Override
