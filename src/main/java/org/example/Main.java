@@ -85,9 +85,12 @@ public static void main(String[] args) {
 
                 robotController.saveDataRobot(clockService,NAME_OF_CVS_FILE);
 
-
-
                 clockService.start();
+
+                while (clockService.running.get());
+
+                detector.join();
+                robotController.join();
 
                 }
 

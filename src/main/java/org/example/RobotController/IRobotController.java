@@ -12,6 +12,8 @@ import java.io.IOException;
  */
 public interface IRobotController {
 
+    public void join() throws InterruptedException;
+
     public void setMotorADirection(int direction);
     public void setMotorBDirection(int direction);
     public void setMotorBPower(int power);

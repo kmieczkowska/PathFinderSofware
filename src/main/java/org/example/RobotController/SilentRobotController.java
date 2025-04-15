@@ -5,6 +5,11 @@ import org.example.Services.ClockService;
 
 public class SilentRobotController implements IRobotController{
     @Override
+    public void join() throws InterruptedException {
+
+    }
+
+    @Override
     public void setMotorADirection(int direction) {
 
     }

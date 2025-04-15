@@ -19,6 +19,7 @@ import java.nio.ByteBuffer;
  */
 public class CameraDetector {
 
+    private Thread clientHandler;
     private IRobotController robotController;
     private InputStream inputStream;
     private OutputStream outputStream;
@@ -105,9 +106,11 @@ public class CameraDetector {
         });
         clientHandler.start();
 
-        while (clockService.running.get());
+    }
 
-        clientHandler.join();
-
+    public void join() throws InterruptedException {
+        if (clientHandler != null) {
+            clientHandler.join(); // 🧵 Wait for thread to finish
+        }
     }
 }

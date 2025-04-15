@@ -12,6 +12,11 @@ public class VirtualRobotController implements IRobotController {
     private int motorBDirection = 1;
 
     @Override
+    public void join() throws InterruptedException {
+
+    }
+
+    @Override
     public void setMotorADirection(int direction) {
         motorADirection = direction;
     }

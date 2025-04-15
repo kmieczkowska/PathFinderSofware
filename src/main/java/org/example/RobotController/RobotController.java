@@ -24,6 +24,8 @@ import java.util.Arrays;
  */
 public class RobotController implements IRobotController {
 
+    private Thread saveDataHandler;
+
     SerialPort serialPort;
 
     SerialPortService serialPortService;
@@ -239,7 +241,7 @@ public class RobotController implements IRobotController {
 
 
     public void saveDataRobot(ClockService clockService, String NAME_OF_CVS_FILE) throws JsonProcessingException, InterruptedException {
-        Thread saveDataHandler = new Thread(() -> {
+        Thread saveDataHandler1 = new Thread(() -> {
 
             long startTime;
             final long TEST_DURATION_NS = 30_000_000_000L; // 30 seconds
@@ -306,11 +308,13 @@ public class RobotController implements IRobotController {
                 System.out.println("Processing ended at: " + new java.util.Date());
             }
         });
+        saveDataHandler = saveDataHandler1;
         saveDataHandler.start();
+    }
 
-        while (clockService.running.get());
-
-        saveDataHandler.join();
-
+    public void join() throws InterruptedException {
+        if (saveDataHandler != null) {
+            saveDataHandler.join(); // 🧵 Wait for thread to finish
+        }
     }
 }
