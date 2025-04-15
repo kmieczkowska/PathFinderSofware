@@ -120,9 +120,13 @@ public class RobotController implements IRobotController {
     @Override
     public void setMovmentSpeed(int motorA, int motorB) {
         String message = "5 " + Integer.toString(motorA) + " " + Integer.toString(motorB) + "\n";
-
-        serialPortService.write(message);
-
+        try {
+            serialPortService.write(message);
+        } catch (Exception e) {
+            System.err.println("Failed to send motor command: " + e.getMessage());
+            e.printStackTrace();
+            // Optionally: signal error, retry, or log to file
+        }
         //serialPort.writeBytes(message.getBytes(), message.length());
     }
 
@@ -265,9 +269,15 @@ public class RobotController implements IRobotController {
 
 
                 while (System.nanoTime() - startTime < TEST_DURATION_NS) {
-                    serialPortService.write(command);
-                    delay(50);
-                    numRead = serialPortService.read(buffer);
+                    try {
+                        serialPortService.write(command);
+                        delay(80);
+                        numRead = serialPortService.read(buffer);
+                    } catch (Exception e) {
+                        System.err.println("Serial communication failed: " + e.getMessage());
+                        e.printStackTrace();
+                        continue; 
+                    }
                     if (numRead > 0) {
                         receivedData = new String(buffer, 0, numRead);
                         try {
