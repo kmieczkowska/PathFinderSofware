@@ -1,6 +1,7 @@
 package org.example.RobotController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.example.Services.ClockService;
 
 /**
  * W przypadku gdy nie wykryto portu szeregowego - obsługa konsoli
@@ -83,7 +84,7 @@ public class VirtualRobotController implements IRobotController {
     public void strategy_1() throws JsonProcessingException {}
 
     @Override
-    public void saveDataRobot() throws JsonProcessingException {}
+    public void saveDataRobot(ClockService clockService, String NAME_OF_CVS_FILE) throws JsonProcessingException {}
     @Override
     public String getRobotData() {
         return "10101";

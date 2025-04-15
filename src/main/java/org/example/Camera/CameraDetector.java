@@ -3,6 +3,7 @@ package org.example.Camera;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.opencv.opencv_java;
 import org.example.RobotController.IRobotController;
+import org.example.Services.ClockService;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
@@ -21,20 +22,23 @@ public class CameraDetector {
     private IRobotController robotController;
     private InputStream inputStream;
     private OutputStream outputStream;
+    private int ROBOT_STRATEGY;
 
     public CameraDetector(IRobotController _robotController,
                           InputStream _inputStream,
-                          OutputStream _outputStream)
+                          OutputStream _outputStream,
+                          int robotStrategy)
     {
         robotController = _robotController;
         inputStream = _inputStream;
         outputStream = _outputStream;
+        ROBOT_STRATEGY = robotStrategy;
     }
 
     /**
      * Uruchomienie kamery; wyświetlenie na obrazie elementów strategii
      */
-    public void start() {
+    public void start(ClockService clockService) throws InterruptedException {
         Loader.load(opencv_java.class);
         ImageProcesor imageProcesor = new ImageProcesor(robotController);
 
@@ -59,8 +63,23 @@ public class CameraDetector {
                 if (capture.read(frame)) {
 
                     try {
-                        frame = imageProcesor.strategy4(frame); // CHOSE YOUR STRATEGY!!
-
+                        switch (ROBOT_STRATEGY){
+                            case 2:
+                                frame = imageProcesor.strategy2(frame);
+                                break;
+                            case 3:
+                                frame = imageProcesor.strategy3(frame);
+                                break;
+                            case 4:
+                                frame = imageProcesor.strategy4(frame);
+                                break;
+                            case 5:
+                                frame = imageProcesor.strategy5(frame);
+                                break;
+                            case 6:
+                                frame = imageProcesor.strategy6(frame);
+                                break;
+                        }
                         Imgcodecs.imencode(".jpg", frame, buffer);
                         byte[] imageBytes = buffer.toArray();
 
@@ -79,10 +98,13 @@ public class CameraDetector {
                 }
 
             }
-
             capture.release();
         });
-
         clientHandler.start();
+
+        while (clockService.running.get());
+
+        clientHandler.join();
+
     }
 }

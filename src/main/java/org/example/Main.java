@@ -1,15 +1,13 @@
 package org.example;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fazecast.jSerialComm.SerialPort;
 import org.example.Camera.CameraDetector;
 import org.example.Configuration.ConfigurationLoader;
 import org.example.RobotController.IRobotController;
 import org.example.RobotController.RobotController;
 import org.example.RobotController.VirtualRobotController;
-import org.opencv.core.Core;
+import org.example.Services.ClockService;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
@@ -32,11 +30,13 @@ public static void main(String[] args) {
         ConfigurationLoader config = new ConfigurationLoader("configuration.properties");
 
         int SERIAL_LOCAL_MODE = Integer.parseInt(config.getSerialMode());
-        int ROBOT_MODE = Integer.parseInt(config.getRobotMode());
+        int ROBOT_STRATEGY = Integer.parseInt(config.getRobotStretegy());
         int MOTOR_A_DIRECTION = Integer.parseInt(config.getMotorADirection());
         int MOTOR_B_DIRECTION = Integer.parseInt(config.getMotorBDirection());
         int MOTOR_A_POWER = Integer.parseInt(config.getMotorAPower());
         int MOTOR_B_POWER = Integer.parseInt(config.getMotorBPower());
+        long RUNNING_DURATION = Integer.parseInt(config.getMotorBPower());;
+        String NAME_OF_CVS_FILE = config.getNameOfCvsFile();
 
         // Connecting to a microcontroller
         try {
@@ -75,21 +75,18 @@ public static void main(String[] args) {
                 outputStream = socket.getOutputStream();
                 inputStream = socket.getInputStream();
 
-                if (ROBOT_MODE == 0) { // Testing the project by pc and camera
-                Thread robotDataHandler = new Thread(() -> {
-                        try {
-                                robotController.saveDataRobot();
-                        }
-                         catch (IOException e) {
-                                e.printStackTrace();
-                        }
-                });
-                robotDataHandler.start();
-                CameraDetector detector = new CameraDetector(robotController, inputStream, outputStream);
-                detector.start();
-                }
-                else if (ROBOT_MODE == 1) { // Testing the project by robot
-                        robotController.saveDataRobot();
+                if (ROBOT_STRATEGY != 0) { // Testing the project by pc and camera
+
+                ClockService clockService = new ClockService();
+
+                CameraDetector detector = new CameraDetector(robotController, inputStream, outputStream, ROBOT_STRATEGY);
+
+                robotController.saveDataRobot(clockService,NAME_OF_CVS_FILE);
+
+                detector.start(clockService);
+
+                clockService.start();
+
                 }
 
         } catch (Exception e) {

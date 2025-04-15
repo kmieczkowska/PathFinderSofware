@@ -2,6 +2,7 @@ package org.example.RobotController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.protobuf.InvalidProtocolBufferException;
+import org.example.Services.ClockService;
 
 import java.io.IOException;
 
@@ -53,5 +54,7 @@ public interface IRobotController {
 
     public void strategy_1() throws JsonProcessingException;
 
-    public void saveDataRobot() throws JsonProcessingException;
+    public void saveDataRobot(ClockService clockService,String NAME_OF_CVS_FILE) throws JsonProcessingException, InterruptedException;
+
+
 }

@@ -1,6 +1,7 @@
 package org.example.RobotController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.example.Services.ClockService;
 
 public class SilentRobotController implements IRobotController{
     @Override
@@ -94,7 +95,7 @@ public class SilentRobotController implements IRobotController{
     }
 
     @Override
-    public void saveDataRobot() throws JsonProcessingException {
+    public void saveDataRobot(ClockService clockService, String NAME_OF_CVS_FILE) throws JsonProcessingException {
 
     }
 
