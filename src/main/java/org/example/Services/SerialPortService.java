@@ -10,6 +10,7 @@ public class SerialPortService {
     }
 
     public synchronized void write(String data) {
+        System.out.println(data);
         serialPort.writeBytes(data.getBytes(), data.length());
     }
 
