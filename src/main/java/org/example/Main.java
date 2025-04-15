@@ -46,8 +46,10 @@ public static void main(String[] args) {
                         serialPort = SerialPort.getCommPort("/dev/ttyACM0");
                 }
                 serialPort.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
-                serialPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 50, 0);
-                serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 500, 0);
+                serialPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
+                serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 100, 0);
+
+
                 initializationPort = serialPort.openPort();
         } catch (Exception e) {
                 e.printStackTrace();
