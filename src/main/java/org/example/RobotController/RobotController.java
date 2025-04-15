@@ -122,6 +122,7 @@ public class RobotController implements IRobotController {
         String message = "5 " + Integer.toString(motorA) + " " + Integer.toString(motorB) + "\n";
         try {
             serialPortService.write(message);
+            delay(20);
         } catch (Exception e) {
             System.err.println("Failed to send motor command: " + e.getMessage());
             e.printStackTrace();
@@ -271,7 +272,7 @@ public class RobotController implements IRobotController {
                 while (System.nanoTime() - startTime < TEST_DURATION_NS) {
                     try {
                         serialPortService.write(command);
-                        delay(80);
+                        delay(150);
                         numRead = serialPortService.read(buffer);
                     } catch (Exception e) {
                         System.err.println("Serial communication failed: " + e.getMessage());

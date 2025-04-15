@@ -59,7 +59,7 @@ public class CameraDetector {
 
             System.out.println("# Reading camera frame...");
             System.out.println("# Robot goes pyr pyr pyr ...");
-            while (true) {
+            while (clockService.running.get()) {
 
                 if (capture.read(frame)) {
 
