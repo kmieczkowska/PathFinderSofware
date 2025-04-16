@@ -60,4 +60,10 @@ public class SerialPortService {
             e.printStackTrace();
         }
     }
+
+    public synchronized void close() {
+        if (serialPort != null) {
+            serialPort.closePort();
+        }
+    }
 }

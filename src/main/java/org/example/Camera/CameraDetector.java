@@ -100,12 +100,12 @@ public class CameraDetector {
                         break;
                     }
                 }
-
             }
             capture.release();
+            System.out.println("# Camera closed!");
+
         });
         clientHandler.start();
-
     }
 
     public void join() throws InterruptedException {
@@ -113,4 +113,6 @@ public class CameraDetector {
             clientHandler.join(); // 🧵 Wait for thread to finish
         }
     }
+
+
 }

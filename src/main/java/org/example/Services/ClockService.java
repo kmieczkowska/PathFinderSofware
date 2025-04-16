@@ -4,6 +4,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClockService {
 
+    private Thread clockHandler;
+
     public AtomicBoolean running = new AtomicBoolean(true);
 
     private int counter = 0;
@@ -16,15 +18,24 @@ public class ClockService {
         return counter;
     }
 
-    public void start() {
+    public void start(long TEST_DURATION_NS ) {
         running.set(true);
-        new Thread(() -> {
+        clockHandler = new Thread(() -> {
             long startTime;
-            final long TEST_DURATION_NS = 30_000_000_000L;
             startTime = System.nanoTime();
             while (System.nanoTime() - startTime < TEST_DURATION_NS);
             running.set(false);
-        }).start();
+            System.out.println("# Clock Times UP!");
+
+        });
+
+        clockHandler.start();
+    }
+
+    public void join() throws InterruptedException {
+        if (clockHandler != null) {
+            clockHandler.join(); // 🧵 Wait for thread to finish
+        }
     }
 
 

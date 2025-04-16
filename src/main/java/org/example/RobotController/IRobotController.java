@@ -57,6 +57,7 @@ public interface IRobotController {
     public void strategy_1() throws JsonProcessingException;
 
     public void saveDataRobot(ClockService clockService,String NAME_OF_CVS_FILE) throws JsonProcessingException, InterruptedException;
+    public void close();
 
 
 }

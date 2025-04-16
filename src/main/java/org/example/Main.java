@@ -69,6 +69,8 @@ public static void main(String[] args) {
         robotController.setMotorAPower(MOTOR_A_POWER);
         robotController.setMotorBPower(MOTOR_B_POWER);
 
+
+
         // Openning the socket
         System.out.println("# Waiting for the tester to grant access...");
         int serverPort = 1234;
@@ -81,28 +83,31 @@ public static void main(String[] args) {
 
                 if (ROBOT_STRATEGY != 0) { // Testing the project by pc and camera
 
-                ClockService clockService = new ClockService();
+                        ClockService clockService = new ClockService();
+                        CameraDetector detector = new CameraDetector(robotController, inputStream, outputStream, ROBOT_STRATEGY);
 
-                CameraDetector detector = new CameraDetector(robotController, inputStream, outputStream, ROBOT_STRATEGY);
+                        //STARTING THREADS HERE
+                        System.out.println("# Starting Threads ⏰.");
+                        detector.start(clockService);
+                        robotController.saveDataRobot(clockService,NAME_OF_CVS_FILE);
+                        clockService.start(RUNNING_DURATION);
 
-                detector.start(clockService);
+                        while (clockService.running.get());
 
-                robotController.saveDataRobot(clockService,NAME_OF_CVS_FILE);
 
-                clockService.start();
-
-                while (clockService.running.get());
-
-                detector.join();
-                robotController.join();
-
-                robotController.setMovmentSpeed(0,0);
-                serialPort.closePort();
-
+                        try {
+                                detector.join();
+                                robotController.join();
+                                clockService.join();
+                                System.out.println("# Joining Threads 🛑.");
+                        } catch (InterruptedException e) {
+                                e.printStackTrace();
+                        }
+                        robotController.close();
                 }
-
         } catch (Exception e) {
                 e.printStackTrace();
         }
+
 }
 }

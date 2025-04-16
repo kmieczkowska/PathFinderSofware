@@ -269,7 +269,7 @@ public class RobotController implements IRobotController {
                 startTime = System.nanoTime();
 
 
-                while (System.nanoTime() - startTime < TEST_DURATION_NS) {
+                while (clockService.running.get()) {
                     try {
                         serialPortService.write(command);
                         delay(150);
@@ -322,6 +322,13 @@ public class RobotController implements IRobotController {
         });
         saveDataHandler = saveDataHandler1;
         saveDataHandler.start();
+    }
+
+    @Override
+    public void close() {
+        emergencyStop();
+        serialPortService.close();
+        System.out.println("# RobotController closed!");
     }
 
     public void join() throws InterruptedException {

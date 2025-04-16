@@ -105,6 +105,11 @@ public class SilentRobotController implements IRobotController{
     }
 
     @Override
+    public void close() {
+
+    }
+
+    @Override
     public String getRobotData() {
         return "";
     }
