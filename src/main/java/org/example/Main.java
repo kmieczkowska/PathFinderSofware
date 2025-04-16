@@ -35,7 +35,7 @@ public static void main(String[] args) {
         int MOTOR_B_DIRECTION = Integer.parseInt(config.getMotorBDirection());
         int MOTOR_A_POWER = Integer.parseInt(config.getMotorAPower());
         int MOTOR_B_POWER = Integer.parseInt(config.getMotorBPower());
-        long RUNNING_DURATION = Integer.parseInt(config.getMotorBPower());;
+        long RUNNING_DURATION = Long.parseLong(config.getRunningDuration());
         String NAME_OF_CVS_FILE = config.getNameOfCvsFile();
 
         // Connecting to a microcontroller
