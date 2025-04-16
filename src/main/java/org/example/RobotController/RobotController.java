@@ -266,8 +266,6 @@ public class RobotController implements IRobotController {
                 writer.append("xAccel,yAccel,zAccel,");
                 writer.append("Temp");
                 writer.append("\n");
-                startTime = System.nanoTime();
-
 
                 while (clockService.running.get()) {
                     try {
@@ -281,6 +279,12 @@ public class RobotController implements IRobotController {
                     }
                     if (numRead > 0) {
                         receivedData = new String(buffer, 0, numRead);
+
+                        if (!receivedData.trim().startsWith("{") || !receivedData.trim().endsWith("}")) {
+                            System.err.println("❌ Invalid JSON structure: " + receivedData);
+                            continue;
+                        }
+
                         try {
                             deserializedRobotData = mapper.readValue(receivedData, RobotDataJson.class);
 
@@ -311,6 +315,8 @@ public class RobotController implements IRobotController {
                             writer.append("\n");
                         } catch (IOException e) {
                             System.out.println("Curapt!");
+                            e.printStackTrace();
+                            continue;
                         }
                     }
                 }
