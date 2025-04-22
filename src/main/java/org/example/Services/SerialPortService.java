@@ -20,7 +20,7 @@ public class SerialPortService {
                 tryReopenPort();
             }
 
-            System.out.println("→ " + data.trim());
+//            System.out.println("→ " + data.trim());
             serialPort.writeBytes(data.getBytes(), data.length());
         } catch (Exception e) {
             System.err.println("❌ Failed to write to serial port: " + e.getMessage());
