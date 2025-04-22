@@ -449,6 +449,25 @@ public class ImageProcesor {
         return outputFrame;
     }
 
+    Mat frame = new Mat();
+
+    String comparisonResult;
+    int width = frame.width();
+    int midX = width / 2;
+
+    int height = frame.height();
+    int midY = height / 2;
+
+    Mat grayFrame = new Mat();
+
+    Mat binaryFrame = new Mat();
+    Mat outputFrame = new Mat();
+
+    Mat sectionA;
+    Mat sectionB;
+    int blackPixelsA = 0;
+    int blackPixelsB = 0;
+
     /**
      * IT WORKS
      * Przetwarzanie obrazu kamery używając:
@@ -457,34 +476,40 @@ public class ImageProcesor {
      */
     public Mat strategy1(Mat frame){
 
-        String comparisonResult; // Comparison which part has more pixels
-
-        // Dividing the image into 2 parts (left | right)
-        int width = frame.width();
-        int midX = width / 2;
-
-        int height = frame.height();
-        int midY = height / 2;
+//        String comparisonResult; // Comparison which part has more pixels
+//
+//        // Dividing the image into 2 parts (left | right)
+//        int width = frame.width();
+//        int midX = width / 2;
+//
+//        int height = frame.height();
+//        int midY = height / 2;
 
 
         // Image conversion to grayscale and binarization
-        Mat grayFrame = new Mat();
+//        Mat grayFrame = new Mat();
         Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY); // GrayScale
 
-        Mat binaryFrame = new Mat();
+//        Mat binaryFrame = new Mat();
         Imgproc.threshold(grayFrame, binaryFrame, treshold, 255, Imgproc.THRESH_BINARY_INV); // Setting the threshold
 
         // Conversion a binarized image back to RGB format - we will be able to draw lines and labels on a video
-        Mat outputFrame = new Mat();
+//        Mat outputFrame = new Mat();
         Imgproc.cvtColor(binaryFrame, outputFrame, Imgproc.COLOR_GRAY2BGR);
 
         // Settings parts
-        Mat sectionA = binaryFrame.submat(0, height, 0, midX); // left part of a video
-        Mat sectionB = binaryFrame.submat(0, height, midX, width); // right part of a video
+//        Mat sectionA = binaryFrame.submat(0, height, 0, midX); // left part of a video
+//        Mat sectionB = binaryFrame.submat(0, height, midX, width); // right part of a video
+
+         sectionA = binaryFrame.submat(0, height, 0, midX); // left part of a video
+         sectionB = binaryFrame.submat(0, height, midX, width); // right part of a video
 
         // Counting pixels on each part
-        int blackPixelsA = Core.countNonZero(sectionA);
-        int blackPixelsB = Core.countNonZero(sectionB);
+//        int blackPixelsA = Core.countNonZero(sectionA);
+//        int blackPixelsB = Core.countNonZero(sectionB);
+
+        blackPixelsA = Core.countNonZero(sectionA);
+        blackPixelsB = Core.countNonZero(sectionB);
 
         if (blackPixelsA > blackPixelsB) {
             robotController.rightWheelForward();
@@ -501,12 +526,10 @@ public class ImageProcesor {
             robotController.moveForward();
         }
 
-
         Imgproc.line(outputFrame, new Point(midX, 0), new Point(midX, height), new Scalar(0, 0, 255), 2); // Red vertical line
         Imgproc.putText(outputFrame, "A", new Point(midX / 2, midY), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
         Imgproc.putText(outputFrame, "B", new Point(midX + midX / 2, midY), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
         Imgproc.putText(outputFrame, comparisonResult, new Point(10, 30), Imgproc.FONT_HERSHEY_SIMPLEX, 0.8, new Scalar(0, 255, 0), 2);
-
         return outputFrame;
     }
 
