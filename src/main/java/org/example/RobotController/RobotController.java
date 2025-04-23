@@ -11,10 +11,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import org.example.Services.ClockService;
 import org.example.Services.SerialPortService;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -246,89 +243,73 @@ public class RobotController implements IRobotController {
     }
 
 
-    public void saveDataRobot(ClockService clockService, String NAME_OF_CVS_FILE) throws JsonProcessingException, InterruptedException {
+    public void saveDataRobot(ClockService clockService, String NAME_OF_CVS_FILE) {
         Thread saveDataHandler1 = new Thread(() -> {
-
-            long startTime;
-            final long TEST_DURATION_NS = 30_000_000_000L; // 30 seconds
             ObjectMapper mapper = new ObjectMapper();
-            byte[] buffer = new byte[1024];
-            String command = "7\n";
-            String receivedData;
-            int numRead = 0;
+            System.out.println("✅ Processing started at: " + new java.util.Date());
 
-            System.out.println("Processing started at: " + new java.util.Date());
-            try (FileWriter writer = new FileWriter("python" + File.separator + "data" + File.separator + NAME_OF_CVS_FILE)) {
+            try (FileWriter writer = new FileWriter("python" + File.separator + "data" + File.separator + NAME_OF_CVS_FILE);
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(serialPort.getInputStream()))) {
+
+                // Write CSV header
                 writer.append("nanoTime,sensorValue1,sensorValue2,sensorValue3,sensorValue4,sensorValue5,");
                 writer.append("xPos,yPos,theta,");
                 writer.append("rawAngle1,rawAngle2,");
                 writer.append("xGyro,yGyro,zGyro,");
                 writer.append("xAccel,yAccel,zAccel,");
-                writer.append("Temp");
-                writer.append("\n");
+                writer.append("Temp\n");
 
-                while (clockService.running.get()) {
-                    try {
-                        serialPortService.write(command);
-                        delay(150);
-                        numRead = serialPortService.read(buffer);
-                    } catch (Exception e) {
-                        System.err.println("Serial communication failed: " + e.getMessage());
-                        e.printStackTrace();
+                String line;
+                while (clockService.running.get() && (line = reader.readLine()) != null) {
+                    line = line.trim();
+
+                    // Basic JSON check
+                    if (!line.startsWith("{") || !line.endsWith("}")) {
+                        System.err.println("❌ Invalid JSON structure: " + line);
                         continue;
                     }
-                    if (numRead > 0) {
-                        receivedData = new String(buffer, 0, numRead);
 
-                        if (!receivedData.trim().startsWith("{") || !receivedData.trim().endsWith("}")) {
-                            System.err.println("❌ Invalid JSON structure: " + receivedData);
-                            continue;
-                        }
+                    try {
+                        RobotDataJson data = mapper.readValue(line, RobotDataJson.class);
 
-                        try {
-                            deserializedRobotData = mapper.readValue(receivedData, RobotDataJson.class);
+                        writer.append(System.nanoTime() + ",")
+                                .append(data.getSensorValue1() + ",")
+                                .append(data.getSensorValue2() + ",")
+                                .append(data.getSensorValue3() + ",")
+                                .append(data.getSensorValue4() + ",")
+                                .append(data.getSensorValue5() + ",")
+                                .append(data.getXPos() + ",")
+                                .append(data.getYPos() + ",")
+                                .append(data.getTheta() + ",")
+                                .append(data.getRawAngle1() + ",")
+                                .append(data.getRawAngle2() + ",")
+                                .append(data.getXGyro() + ",")
+                                .append(data.getYGyro() + ",")
+                                .append(data.getZGyro() + ",")
+                                .append(data.getXAccel() + ",")
+                                .append(data.getYAccel() + ",")
+                                .append(data.getZAccel() + ",")
+                                .append(data.getTemp() + "\n");
 
-                            writer.append(System.nanoTime() + ",");
+                        writer.flush(); // Optional, but safe for real-time logging
 
-                            writer.append(deserializedRobotData.getSensorValue1() + ",");
-                            writer.append(deserializedRobotData.getSensorValue2() + ",");
-                            writer.append(deserializedRobotData.getSensorValue3() + ",");
-                            writer.append(deserializedRobotData.getSensorValue4() + ",");
-                            writer.append(deserializedRobotData.getSensorValue5() + ",");
-
-                            writer.append(deserializedRobotData.getXPos() + ",");
-                            writer.append(deserializedRobotData.getYPos() + ",");
-                            writer.append(deserializedRobotData.getTheta() + ",");
-
-                            writer.append(deserializedRobotData.getRawAngle1() + ",");
-                            writer.append(deserializedRobotData.getRawAngle2() + ",");
-
-                            writer.append(deserializedRobotData.getXGyro() + ",");
-                            writer.append(deserializedRobotData.getYGyro() + ",");
-                            writer.append(deserializedRobotData.getZGyro() + ",");
-
-                            writer.append(deserializedRobotData.getXAccel() + ",");
-                            writer.append(deserializedRobotData.getYAccel() + ",");
-                            writer.append(deserializedRobotData.getZAccel() + ",");
-
-                            writer.append(deserializedRobotData.getTemp() + "");
-                            writer.append("\n");
-                        } catch (IOException e) {
-                            System.out.println("Curapt!");
-                            e.printStackTrace();
-                            continue;
-                        }
+                    } catch (IOException e) {
+                        System.err.println("❌ JSON parsing error for line: " + line);
+                        e.printStackTrace();
                     }
                 }
             } catch (IOException e) {
-                System.err.println("Error saving to CSV: " + e.getMessage());
+                System.err.println("❌ Error saving to CSV: " + e.getMessage());
+                e.printStackTrace();
             } finally {
-                System.out.println("Processing ended at: " + new java.util.Date());
+                System.out.println("🛑 Processing ended at: " + new java.util.Date());
             }
         });
+
         saveDataHandler = saveDataHandler1;
         saveDataHandler.start();
     }
+
 
     @Override
     public void close() {

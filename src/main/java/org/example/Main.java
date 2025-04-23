@@ -88,13 +88,13 @@ public static void main(String[] args) {
                         //STARTING THREADS HERE
                         System.out.println("# Starting Threads ⏰.");
                         detector.start(clockService);
-//                        robotController.saveDataRobot(clockService,NAME_OF_CVS_FILE);
+                        robotController.saveDataRobot(clockService,NAME_OF_CVS_FILE);
                         clockService.start(RUNNING_DURATION);
 
                         while (clockService.running.get());
                         try {
                                 detector.join();
-//                                robotController.join();
+                                robotController.join();
                                 clockService.join();
                                 System.out.println("# Joining Threads 🛑.");
                         } catch (InterruptedException e) {
