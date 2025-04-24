@@ -202,12 +202,12 @@ public class ImageProcesor {
 
                 // Rotate in the opposite direction to the last one
                 if ("left".equals(lastDirection)) {
-                    robotController.turnRight();
+                    robotController.leftWheelForward();
                 } else if ("right".equals(lastDirection)) {
-                    robotController.turnLeft();
+                    robotController.rightWheelForward();
                 } else {
                     // If it was moving forward, start turning right or left (any)
-                    robotController.turnRight();
+                    robotController.leftWheelForward();
                 }
             } else {
 //                robotController.setMovmentSpeed(0, 0);  // Stop ODKOMENTOWAC I SPRAWDZIC JAK DZIALA
