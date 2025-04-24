@@ -36,6 +36,7 @@ public static void main(String[] args) {
         int MOTOR_A_POWER = Integer.parseInt(config.getMotorAPower());
         int MOTOR_B_POWER = Integer.parseInt(config.getMotorBPower());
         long RUNNING_DURATION = Long.parseLong(config.getRunningDuration());
+        int ENABLE_SAVING = Integer.parseInt(config.getSavingProperty());
         String NAME_OF_CVS_FILE = config.getNameOfCvsFile();
 
         // Connecting to a microcontroller
@@ -88,13 +89,13 @@ public static void main(String[] args) {
                         //STARTING THREADS HERE
                         System.out.println("# Starting Threads ⏰.");
                         detector.start(clockService);
-                        robotController.saveDataRobot(clockService,NAME_OF_CVS_FILE);
+                        if(ENABLE_SAVING == 1) robotController.saveDataRobot(clockService,NAME_OF_CVS_FILE);
                         clockService.start(RUNNING_DURATION);
 
                         while (clockService.running.get());
                         try {
+                                if(ENABLE_SAVING == 1) robotController.join();
                                 detector.join();
-                                robotController.join();
                                 clockService.join();
                                 System.out.println("# Joining Threads 🛑.");
                         } catch (InterruptedException e) {

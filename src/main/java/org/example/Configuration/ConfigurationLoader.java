@@ -33,5 +33,6 @@ public class ConfigurationLoader {
 
     public String getNameOfCvsFile() { return properties.getProperty("NAME_OF_CVS_FILE"); }
     public String getRunningDuration() { return properties.getProperty("RUNNING_DURATION"); }
+    public String getSavingProperty() {return  properties.getProperty("ENABLE_SAVING");}
 
 }
