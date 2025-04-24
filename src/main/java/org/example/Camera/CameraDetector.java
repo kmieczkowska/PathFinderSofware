@@ -62,7 +62,7 @@ public class CameraDetector {
             while (clockService.running.get()) {
 
                 if (capture.read(frame)) {
-
+                    clockService.increment();
                     try {
                         switch (ROBOT_STRATEGY){
                             case 1:

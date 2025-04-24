@@ -257,7 +257,8 @@ public class RobotController implements IRobotController {
                 writer.append("rawAngle1,rawAngle2,");
                 writer.append("xGyro,yGyro,zGyro,");
                 writer.append("xAccel,yAccel,zAccel,");
-                writer.append("Temp\n");
+                writer.append("Temp,");
+                writer.append("Frame\n");
 
                 String line;
                 while (clockService.running.get() && (line = reader.readLine()) != null) {
@@ -289,9 +290,11 @@ public class RobotController implements IRobotController {
                                 .append(data.getXAccel() + ",")
                                 .append(data.getYAccel() + ",")
                                 .append(data.getZAccel() + ",")
-                                .append(data.getTemp() + "\n");
+                                .append(data.getTemp() + ",")
+                                .append(clockService.getCounter() + "\n");
 
                         writer.flush(); // Optional, but safe for real-time logging
+                        clockService.resetCounter();
 
                     } catch (IOException e) {
                         System.err.println("❌ JSON parsing error for line: " + line);

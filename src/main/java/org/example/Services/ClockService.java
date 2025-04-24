@@ -17,6 +17,9 @@ public class ClockService {
     public synchronized int getCounter() {
         return counter;
     }
+    public synchronized void resetCounter() {
+        counter = 0;
+    }
 
     public void start(long TEST_DURATION_NS ) {
         running.set(true);
