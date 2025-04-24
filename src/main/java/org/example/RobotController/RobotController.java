@@ -274,7 +274,7 @@ public class RobotController implements IRobotController {
                     try {
                         RobotDataJson data = mapper.readValue(line, RobotDataJson.class);
 
-                        writer.append((startTime - System.nanoTime()) / 1000000000+ ",")
+                        writer.append(((System.nanoTime() - startTime) / 1000000000)+ ",")
                                 .append(data.getSensorValue1() + ",")
                                 .append(data.getSensorValue2() + ",")
                                 .append(data.getSensorValue3() + ",")
