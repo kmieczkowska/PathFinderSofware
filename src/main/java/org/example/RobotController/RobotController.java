@@ -245,6 +245,7 @@ public class RobotController implements IRobotController {
 
     public void saveDataRobot(ClockService clockService, String NAME_OF_CVS_FILE) {
         Thread saveDataHandler1 = new Thread(() -> {
+            long startTime = System.nanoTime();
             ObjectMapper mapper = new ObjectMapper();
             System.out.println("✅ Processing started at: " + new java.util.Date());
 
@@ -252,7 +253,7 @@ public class RobotController implements IRobotController {
                  BufferedReader reader = new BufferedReader(new InputStreamReader(serialPort.getInputStream()))) {
 
                 // Write CSV header
-                writer.append("nanoTime,sensorValue1,sensorValue2,sensorValue3,sensorValue4,sensorValue5,");
+                writer.append("time,sensorValue1,sensorValue2,sensorValue3,sensorValue4,sensorValue5,");
                 writer.append("xPos,yPos,theta,");
                 writer.append("rawAngle1,rawAngle2,");
                 writer.append("xGyro,yGyro,zGyro,");
@@ -273,7 +274,7 @@ public class RobotController implements IRobotController {
                     try {
                         RobotDataJson data = mapper.readValue(line, RobotDataJson.class);
 
-                        writer.append(System.nanoTime() + ",")
+                        writer.append((startTime - System.nanoTime()) / 1000000000+ ",")
                                 .append(data.getSensorValue1() + ",")
                                 .append(data.getSensorValue2() + ",")
                                 .append(data.getSensorValue3() + ",")
